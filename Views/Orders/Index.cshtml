@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Order>
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="Orders" asp-action="Index">
+        @foreach (Order order in Model)
+        {
+            <label asp-for="@order.Id">@order.Id</label><br />
+            <label asp-for="@order.ClientAddressId">@order.ClientAddressId</label><br />
+            <label asp-for="@order.IsCompleted">@order.IsCompleted</label><br />
+            <label asp-for="@order.OrderingDate">@order.OrderingDate</label><br />
+        }
+    </form>
+</body>
+</html>

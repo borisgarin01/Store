@@ -1,0 +1,13 @@
+﻿@model IEnumerable<ProductKind>
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="ProductsKinds" asp-action="Index">
+        @foreach (ProductKind productKind in Model)
+        {
+            <label asp-for="@productKind.Id">@productKind.Id</label><br />
+            <label asp-for="@productKind.KindName">@productKind.KindName</label><br />
+        }
+    </form>
+</body>
+</html>

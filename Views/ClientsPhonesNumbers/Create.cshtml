@@ -1,0 +1,11 @@
+﻿@model ClientPhoneNumber
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="ClientsPhonesNumbers" asp-action="Create">
+        <input asp-for="ClientId" /><br />
+        <input asp-for="PhoneNumber" /><br />
+        <input type="submit" value="Add" /><br />
+    </form>
+</body>
+</html>

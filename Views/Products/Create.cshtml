@@ -1,0 +1,13 @@
+﻿@model Product
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Products" asp-action="Create">
+        <input asp-for="CategoryId" /><br />
+        <input asp-for="ManufacturerId" /><br />
+        <input asp-for="ProductKindId" /><br />
+        <input asp-for="ProductName" /><br />
+        <input type="submit" value="Add" /><br />
+    </form>
+</body>
+</html>

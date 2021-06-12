@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+#nullable disable
+
+namespace Store.Models
+{
+    public partial class Manufacturer
+    {
+        public Manufacturer()
+        {
+            Products = new HashSet<Product>();
+        }
+
+        public int Id { get; set; }
+        [Required][StringLength(255)]public string ManufacturerName { get; set; }
+
+        public virtual ICollection<Product> Products { get; set; }
+    }
+}

@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Store>
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="Stores" asp-action="Index">
+        @foreach (Store store in Model)
+        {
+            <label asp-for="@store.Id">@store.Id</label><br />
+            <label asp-for="@store.AddressId">@store.AddressId</label><br />
+        }
+    </form>
+</body>
+</html>

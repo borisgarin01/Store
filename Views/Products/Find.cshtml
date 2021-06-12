@@ -1,0 +1,13 @@
+﻿@model Product
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="Products" asp-action="Find">
+        <label asp-for="Id">@Model.Id</label><br />
+        <label asp-for="CategoryId">@Model.CategoryId</label><br />
+        <label asp-for="ManufacturerId">@Model.ManufacturerId</label><br />
+        <label asp-for="ProductKindId">@Model.ProductKindId</label><br />
+        <label asp-for="ProductName">@Model.ProductName</label><br />
+    </form>
+</body>
+</html>

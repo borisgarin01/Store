@@ -1,0 +1,11 @@
+﻿@model Category
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Categories" asp-action="Delete">
+        <label asp-for="Id">@Model.Id</label><br />
+        <label asp-for="CategoryName">@Model.CategoryName</label><br />
+        <input type="submit" value="Delete" /><br />
+    </form>
+</body>
+</html>

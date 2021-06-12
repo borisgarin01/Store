@@ -1,0 +1,10 @@
+﻿@model ProductKind
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="ProductsKinds" asp-action="Find">
+        <label asp-for="Id">@Model.Id</label><br />
+        <label asp-for="KindName">@Model.KindName</label><br />
+    </form>
+</body>
+</html>

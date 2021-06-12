@@ -1,0 +1,14 @@
+﻿@model IEnumerable<CommonProductLeftoversOnPrimaryWarehouse>
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="CommonProductsLeftoversOnPrimaryWarehouse" asp-action="Index">
+        @foreach (CommonProductLeftoversOnPrimaryWarehouse commonProductLeftoversOnPrimaryWarehouse in Model)
+        {
+            <label asp-for="@commonProductLeftoversOnPrimaryWarehouse.Id">@commonProductLeftoversOnPrimaryWarehouse.Id</label><br />
+            <label asp-for="@commonProductLeftoversOnPrimaryWarehouse.ProductId">@commonProductLeftoversOnPrimaryWarehouse.ProductId</label><br />
+            <label asp-for="@commonProductLeftoversOnPrimaryWarehouse.Quantity">@commonProductLeftoversOnPrimaryWarehouse.Quantity</label><br />
+        }
+    </form>
+</body>
+</html>

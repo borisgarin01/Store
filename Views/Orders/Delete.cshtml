@@ -1,0 +1,13 @@
+﻿@model Order
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Orders" asp-action="Delete">
+        <label asp-for="Id">@Model.Id</label><br />
+        <label asp-for="ClientAddressId">@Model.ClientAddressId</label><br />
+        <label asp-for="IsCompleted">@Model.IsCompleted</label><br />
+        <label asp-for="OrderingDate">@Model.OrderingDate</label><br />
+        <input type="submit" value="Delete" /><br />
+    </form>
+</body>
+</html>

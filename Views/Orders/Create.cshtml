@@ -1,0 +1,12 @@
+﻿@model Order
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Orders" asp-action="Create">
+        <input asp-for="ClientAddressId" /><br />
+        <input asp-for="IsCompleted" /><br />
+        <input asp-for="OrderingDate" /><br />
+        <input type="submit" value="Add" /><br />
+    </form>
+</body>
+</html>

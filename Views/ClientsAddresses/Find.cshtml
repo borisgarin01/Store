@@ -1,0 +1,11 @@
+﻿@model ClientAddress
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="ClientsAddresses" asp-action="Find">
+        <label asp-for="Id">@Model.Id</label><br />
+        <label asp-for="AddressId">@Model.AddressId</label><br />
+        <label asp-for="ClientId">@Model.ClientId</label><br />
+    </form>
+</body>
+</html>

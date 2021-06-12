@@ -1,0 +1,12 @@
+﻿@model CommonProductLeftoversOnPrimaryWarehouse
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="CommonProductsLeftoversOnPrimaryWarehouse" asp-action="Delete">
+        <label asp-for="Id">@Model.Id</label><br />
+        <label asp-for="ProductId">@Model.ProductId</label><br />
+        <label asp-for="Quantity">@Model.Quantity</label><br />
+        <input type="submit" value="Delete" /><br />
+    </form>
+</body>
+</html>

@@ -1,0 +1,11 @@
+﻿@model Cart
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Carts" asp-action="Delete">
+        <label asp-for="Id">@Model.Id</label><br />
+        <label asp-for="ClientId">@Model.ClientId</label><br />
+        <input type="submit" value="Delete" /><br />
+    </form>
+</body>
+</html>

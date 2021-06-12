@@ -1,0 +1,14 @@
+﻿@model IEnumerable<ClientPhoneNumber>
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="ClientsPhonesNumbers" asp-action="Index">
+        @foreach (ClientPhoneNumber clientPhoneNumber in Model)
+        {
+            <label asp-for="@clientPhoneNumber.Id">@clientPhoneNumber.Id</label><br />
+            <label asp-for="@clientPhoneNumber.ClientId">@clientPhoneNumber.ClientId</label><br />
+            <label asp-for="@clientPhoneNumber.PhoneNumber">@clientPhoneNumber.PhoneNumber</label><br />
+        }
+    </form>
+</body>
+</html>

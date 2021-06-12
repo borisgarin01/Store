@@ -1,0 +1,10 @@
+﻿@model Cart
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Carts" asp-action="Create">
+        <input asp-for="ClientId" /><br />
+        <input type="submit" value="Add" /><br />
+    </form>
+</body>
+</html>

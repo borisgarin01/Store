@@ -1,0 +1,11 @@
+﻿@model Client
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Clients" asp-action="Create">
+        <input asp-for="FirstName" /><br />
+        <input asp-for="LastName" /><br />
+        <input type="submit" value="Add" /><br />
+    </form>
+</body>
+</html>

@@ -1,0 +1,14 @@
+﻿@model IEnumerable<ClientEmail>
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="ClientsEmails" asp-action="Index">
+        @foreach (ClientEmail clientEmail in Model)
+        {
+            <label asp-for="@clientEmail.Id">@clientEmail.Id</label><br />
+            <label asp-for="@clientEmail.ClientId">@clientEmail.ClientId</label><br />
+            <label asp-for="@clientEmail.EmailAddress">@clientEmail.EmailAddress</label><br />
+        }
+    </form>
+</body>
+</html>

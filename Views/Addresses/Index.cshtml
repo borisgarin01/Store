@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Address>
+<!DOCTYPE html>
+<html>
+<body>
+    <form asp-controller="Addresses" asp-action="Index">
+        @foreach (Address address in Model)
+        {
+            <label asp-for="@address.City">@address.City</label><br />
+            <label asp-for="@address.Country">@address.Country</label><br />
+            <label asp-for="@address.FlatNumber">@address.FlatNumber</label><br />
+            <label asp-for="@address.HouseNumber">@address.HouseNumber</label><br />
+            <label asp-for="@address.PostIndex">@address.PostIndex</label><br />
+            <label asp-for="@address.Street">@address.Street</label><br />
+        }
+    </form>
+</body>
+</html>

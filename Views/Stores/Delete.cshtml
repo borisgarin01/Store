@@ -1,0 +1,11 @@
+﻿@model Store
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Stores" asp-action="Delete">
+        <label asp-for="Id">@Model.Id</label><br />
+        <label asp-for="AddressId">@Model.AddressId</label><br />
+        <input type="submit" value="Delete" /><br />
+    </form>
+</body>
+</html>

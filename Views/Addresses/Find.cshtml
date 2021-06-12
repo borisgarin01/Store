@@ -1,0 +1,14 @@
+﻿@model Address
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="Addresses" asp-action="Find">
+        <label asp-for="City">@Model.City</label><br />
+        <label asp-for="Country">@Model.Country</label><br />
+        <label asp-for="FlatNumber">@Model.FlatNumber</label><br />
+        <label asp-for="HouseNumber">@Model.HouseNumber</label><br />
+        <label asp-for="PostIndex">@Model.PostIndex</label><br />
+        <label asp-for="Street">@Model.Street</label><br />
+    </form>
+</body>
+</html>

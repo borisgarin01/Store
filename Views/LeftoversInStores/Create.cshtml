@@ -1,0 +1,12 @@
+﻿@model LeftoversInStore
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="LeftoversInStores" asp-action="Create">
+        <input asp-for="ProductId" /><br />
+        <input asp-for="Quantity" /><br />
+        <input asp-for="StoreId" /><br />
+        <input type="submit" value="Add" /><br />
+    </form>
+</body>
+</html>

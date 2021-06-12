@@ -1,0 +1,12 @@
+﻿@model OrderItem
+<!DOCTYPE html>
+<html>
+<body>
+    <form  asp-controller="OrdersItems" asp-action="Find">
+        <label asp-for="Id">@Model.Id</label><br />
+        <label asp-for="OrderId">@Model.OrderId</label><br />
+        <label asp-for="ProductId">@Model.ProductId</label><br />
+        <label asp-for="Quantity">@Model.Quantity</label><br />
+    </form>
+</body>
+</html>
