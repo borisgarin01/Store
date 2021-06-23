@@ -3,12 +3,13 @@
 <html>
 <body>
     <form method="post" asp-controller="Products" asp-action="Delete">
-        <label asp-for="Id">@Model.Id</label><br />
-        <label asp-for="CategoryId">@Model.CategoryId</label><br />
-        <label asp-for="ManufacturerId">@Model.ManufacturerId</label><br />
-        <label asp-for="ProductKindId">@Model.ProductKindId</label><br />
-        <label asp-for="ProductName">@Model.ProductName</label><br />
-        <input type="submit" value="Delete" /><br />
+        <h6>@Model.Id</h6><br />
+        <h6>@Model.CategoryId</h6><br />
+        <h6>@Model.ManufacturerId</h6><br />
+        <h6>@Model.Price</h6><br />
+        <h6>@Model.ProductKindId</h6><br />
+        <h6>@Model.ProductName</h6><br />
+        <input type="submit" value="Delete product" />
     </form>
 </body>
 </html>

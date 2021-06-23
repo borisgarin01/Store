@@ -1,11 +1,11 @@
-﻿@model ProductKind
+﻿@model ProductsKind
 <!DOCTYPE html>
 <html>
 <body>
     <form method="post" asp-controller="ProductsKinds" asp-action="Delete">
-        <label asp-for="Id">@Model.Id</label><br />
-        <label asp-for="KindName">@Model.KindName</label><br />
-        <input type="submit" value="Delete" /><br />
+        <h6>@Model.Id</h6><br />
+        <h6>@Model.KindName</h6><br />
+        <input type="submit" value="Delete product kind" />
     </form>
 </body>
 </html>

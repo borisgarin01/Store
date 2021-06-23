@@ -1,0 +1,18 @@
+﻿@model List<Cart>
+<!DOCTYPE html>
+<html>
+<body>
+    <form asp-controller="Carts" asp-action="Index">
+        <a asp-action="Create">Create new cart</a><br />
+        @foreach (Cart cart in Model)
+        {
+            <div>
+                Id: @cart.Id<br />
+                Client Id: @cart.ClientId<br />
+                <a asp-action="Edit" asp-route-id="@cart.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@cart.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

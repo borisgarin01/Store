@@ -1,0 +1,23 @@
+﻿@model List<OrdersItem>
+<!DOCTYPE html>
+<html>
+<body>
+
+    <form asp-controller="OrdersItems" asp-action="Index">
+        <a asp-action="Create">Create new order item</a><br />
+
+        @foreach (OrdersItem ordersItem in Model)
+        {
+            <div>
+                Id: @ordersItem.Id<br />
+                Order Id: @ordersItem.OrderId<br />
+                Product Id: @ordersItem.ProductId<br />
+                Quantity: @ordersItem.Quantity<br />
+
+                <a asp-action="Edit" asp-route-id="@ordersItem.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@ordersItem.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

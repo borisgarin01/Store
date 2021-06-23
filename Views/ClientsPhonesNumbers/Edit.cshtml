@@ -1,0 +1,11 @@
+﻿@model ClientsPhonesNumber
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="ClientsPhonesNumbers" asp-action="Edit">
+        <input asp-for="ClientId" placeholder="Client Id" value="@Model.ClientId" /><br />
+        <input asp-for="PhoneNumber" placeholder="Phone number" value="@Model.PhoneNumber" /><br />
+        <button type="submit">Update client phone number</button>
+    </form>
+</body>
+</html>

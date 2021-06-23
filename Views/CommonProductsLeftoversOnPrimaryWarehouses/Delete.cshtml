@@ -1,0 +1,12 @@
+﻿@model CommonProductsLeftoversOnPrimaryWarehouse
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="CommonProductsLeftoversOnPrimaryWarehouses" asp-action="Delete">
+        <h6>@Model.Id</h6><br />
+        <h6>@Model.ProductId</h6><br />
+        <h6>@Model.Quantity</h6><br />
+        <input type="submit" value="Delete common product leftover on primary warehouse" />
+    </form>
+</body>
+</html>

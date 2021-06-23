@@ -1,13 +1,13 @@
-﻿@model OrderItem
+﻿@model OrdersItem
 <!DOCTYPE html>
 <html>
 <body>
     <form method="post" asp-controller="OrdersItems" asp-action="Delete">
-        <label asp-for="Id">@Model.Id</label><br />
-        <label asp-for="OrderId">@Model.OrderId</label><br />
-        <label asp-for="ProductId">@Model.ProductId</label><br />
-        <label asp-for="Quantity">@Model.Quantity</label><br />
-        <input type="submit" value="Delete" /><br />
+        <h6>@Model.Id</h6><br />
+        <h6>@Model.OrderId</h6><br />
+        <h6>@Model.ProductId</h6><br />
+        <h6>@Model.Quantity</h6><br />
+        <input type="submit" value="Delete order item" />
     </form>
 </body>
 </html>

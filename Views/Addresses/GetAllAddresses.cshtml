@@ -1,0 +1,24 @@
+﻿@model List<Address>
+<!DOCTYPE html>
+<html>
+<body>
+    
+    <form asp-controller="Addresses" asp-action="Index">
+        <a asp-action="Create">Create new address</a><br />
+        @foreach (Address address in Model)
+        {
+            <div>
+                @address.Id<br />
+                City: @address.City<br />
+                Country: @address.Country<br />
+                Flat number: @address.FlatNumber<br />
+                House number: @address.HouseNumber<br />
+                Post index: @address.PostIndex<br />
+                Street: @address.Street<br />
+                <a asp-action="Edit" asp-route-id="@address.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@address.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

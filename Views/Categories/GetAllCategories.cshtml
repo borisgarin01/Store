@@ -1,0 +1,18 @@
+﻿@model List<Category>
+<!DOCTYPE html>
+<html>
+<body>
+    <form asp-controller="Categories" asp-action="Index">
+        <a asp-action="Create">Create new category</a><br />
+        @foreach (Category category in Model)
+        {
+            <div>
+                Id: @category.Id<br />
+                Cart Id: @category.CategoryName<br />
+                <a asp-action="Edit" asp-route-id="@category.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@category.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

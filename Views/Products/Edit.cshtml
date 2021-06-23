@@ -1,0 +1,14 @@
+﻿@model Product
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Products" asp-action="Edit">
+        <input asp-for="CategoryId" placeholder="Category Id" value="@Model.CategoryId" /><br />
+        <input asp-for="ManufacturerId" placeholder="Manufacturer Id" value="@Model.ManufacturerId" /><br />
+        <input asp-for="Price" placeholder="Price"  value="@Model.Price" /><br />
+        <input asp-for="ProductKindId" placeholder="Product Kind Id"  value="@Model.ProductKindId" /><br />
+        <input asp-for="ProductName" placeholder="Product Name"  value="@Model.ProductName" /><br />
+        <button type="submit">Update product</button>
+    </form>
+</body>
+</html>

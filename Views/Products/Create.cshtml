@@ -3,11 +3,12 @@
 <html>
 <body>
     <form method="post" asp-controller="Products" asp-action="Create">
-        <input asp-for="CategoryId" /><br />
-        <input asp-for="ManufacturerId" /><br />
-        <input asp-for="ProductKindId" /><br />
-        <input asp-for="ProductName" /><br />
-        <input type="submit" value="Add" /><br />
+        <input asp-for="CategoryId" placeholder="Category Id" /><br />
+        <input asp-for="ManufacturerId" placeholder="Manufacturer Id" /><br />
+        <input asp-for="Price" placeholder="Price" /><br />
+        <input asp-for="ProductKindId" placeholder="Product Kind Id" /><br />
+        <input asp-for="ProductName" placeholder="Product Name" /><br />
+        <input type="submit" value="Add product" />
     </form>
 </body>
 </html>

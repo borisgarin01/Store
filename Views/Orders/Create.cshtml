@@ -3,10 +3,10 @@
 <html>
 <body>
     <form method="post" asp-controller="Orders" asp-action="Create">
-        <input asp-for="ClientAddressId" /><br />
-        <input asp-for="IsCompleted" /><br />
-        <input asp-for="OrderingDate" /><br />
-        <input type="submit" value="Add" /><br />
+        <input asp-for="ClientAddressId" placeholder="Client Address Id" /><br />
+        <input asp-for="OrderingDate" placeholder="Ordering Date" /><br />
+
+        <input type="submit" value="Add order" />
     </form>
 </body>
 </html>

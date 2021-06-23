@@ -1,12 +1,13 @@
-﻿@model OrderItem
+﻿@model OrdersItem
 <!DOCTYPE html>
 <html>
 <body>
     <form method="post" asp-controller="OrdersItems" asp-action="Create">
-        <input asp-for="OrderId" /><br />
-        <input asp-for="ProductId" /><br />
-        <input asp-for="Quantity" /><br />
-        <input type="submit" value="Add" /><br />
+        <input asp-for="OrderId" placeholder="Order Id" /><br />
+        <input asp-for="ProductId" placeholder="Product Id" /><br />
+        <input asp-for="Quantity" placeholder="Quantity" /><br />
+
+        <input type="submit" value="Add order item" />
     </form>
 </body>
 </html>

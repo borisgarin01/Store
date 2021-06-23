@@ -1,0 +1,23 @@
+﻿@model List<ProductsKind>
+<!DOCTYPE html>
+<html>
+<body>
+
+
+    <form asp-controller="ProductsKinds" asp-action="Index">
+        <a asp-action="Create">Create new product kind</a><br />
+
+
+        @foreach (ProductsKind productsKind in Model)
+        {
+            <div>
+                Id: @productsKind.Id<br />
+                Kind name: @productsKind.KindName<br />
+
+                <a asp-action="Edit" asp-route-id="@productsKind.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@productsKind.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

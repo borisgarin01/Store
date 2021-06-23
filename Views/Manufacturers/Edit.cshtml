@@ -1,0 +1,10 @@
+﻿@model Manufacturer
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Manufacturers" asp-action="Edit">
+        <input asp-for="ManufacturerName" placeholder="Manufacturer name" value="@Model.ManufacturerName" /><br />
+        <button type="submit">Update manufacturer</button>
+    </form>
+</body>
+</html>

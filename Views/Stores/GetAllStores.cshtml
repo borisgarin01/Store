@@ -1,0 +1,22 @@
+﻿@model List<Store>
+<!DOCTYPE html>
+<html>
+<body>
+
+    <form asp-controller="Stores" asp-action="Index">
+        <a asp-action="Create">Create new store</a><br />
+
+
+        @foreach (Store store in Model)
+        {
+            <div>
+                Id: @store.Id<br />
+                Address Id: @store.AddressId<br />
+
+                <a asp-action="Edit" asp-route-id="@store.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@store.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

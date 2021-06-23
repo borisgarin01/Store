@@ -20,20 +20,20 @@ namespace Store.Data
 
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
-        public virtual DbSet<CartItem> CartsItems { get; set; }
+        public virtual DbSet<CartsItem> CartsItems { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Client> Clients { get; set; }
-        public virtual DbSet<ClientAddress> ClientsAddresses { get; set; }
-        public virtual DbSet<ClientEmail> ClientsEmails { get; set; }
-        public virtual DbSet<ClientPhoneNumber> ClientsPhonesNumbers { get; set; }
-        public virtual DbSet<CommonProductLeftoversOnPrimaryWarehouse> CommonProductLeftoversOnPrimaryWarehouses { get; set; }
+        public virtual DbSet<ClientsAddress> ClientsAddresses { get; set; }
+        public virtual DbSet<ClientsEmail> ClientsEmails { get; set; }
+        public virtual DbSet<ClientsPhonesNumber> ClientsPhonesNumbers { get; set; }
+        public virtual DbSet<CommonProductsLeftoversOnPrimaryWarehouse> CommonProductsLeftoversOnPrimaryWarehouses { get; set; }
         public virtual DbSet<LeftoversInStore> LeftoversInStores { get; set; }
         public virtual DbSet<Manufacturer> Manufacturers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<OrderItem> OrdersItems { get; set; }
+        public virtual DbSet<OrdersItem> OrdersItems { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<ProductKind> ProductsKinds { get; set; }
-        public virtual DbSet<Models.Store> Stores { get; set; }
+        public virtual DbSet<ProductsKind> ProductsKinds { get; set; }
+        public virtual DbSet<Store.Models.Store> Stores { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -101,7 +101,7 @@ namespace Store.Data
                     .HasConstraintName("carts_ibfk_1");
             });
 
-            modelBuilder.Entity<CartItem>(entity =>
+            modelBuilder.Entity<CartsItem>(entity =>
             {
                 entity.HasIndex(e => e.CartId, "CartId");
 
@@ -130,7 +130,7 @@ namespace Store.Data
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnType("int(11)");
+                entity.Property(e => e.Id).HasColumnType("bigint(20)");
 
                 entity.Property(e => e.CategoryName)
                     .IsRequired()
@@ -156,7 +156,7 @@ namespace Store.Data
                     .HasCharSet("utf8");
             });
 
-            modelBuilder.Entity<ClientAddress>(entity =>
+            modelBuilder.Entity<ClientsAddress>(entity =>
             {
                 entity.HasIndex(e => e.AddressId, "AddressId");
 
@@ -181,7 +181,7 @@ namespace Store.Data
                     .HasConstraintName("clientsaddresses_ibfk_1");
             });
 
-            modelBuilder.Entity<ClientEmail>(entity =>
+            modelBuilder.Entity<ClientsEmail>(entity =>
             {
                 entity.HasIndex(e => e.ClientId, "ClientId");
 
@@ -200,7 +200,7 @@ namespace Store.Data
                     .HasConstraintName("clientsemails_ibfk_1");
             });
 
-            modelBuilder.Entity<ClientPhoneNumber>(entity =>
+            modelBuilder.Entity<ClientsPhonesNumber>(entity =>
             {
                 entity.HasIndex(e => e.ClientId, "ClientId");
 
@@ -219,21 +219,27 @@ namespace Store.Data
                     .HasConstraintName("clientsphonesnumbers_ibfk_1");
             });
 
-            modelBuilder.Entity<CommonProductLeftoversOnPrimaryWarehouse>(entity =>
+            modelBuilder.Entity<CommonProductsLeftoversOnPrimaryWarehouse>(entity =>
             {
-                entity.ToTable("CommonProductLeftoversOnPrimaryWarehouse");
+                entity.ToTable("CommonProductsLeftoversOnPrimaryWarehouse");
+
+                entity.HasIndex(e => e.ProductId, "ProductId");
 
                 entity.Property(e => e.Id).HasColumnType("bigint(20)");
 
                 entity.Property(e => e.ProductId).HasColumnType("bigint(20)");
 
                 entity.Property(e => e.Quantity).HasColumnType("bigint(20)");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.CommonProductsLeftoversOnPrimaryWarehouses)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("commonproductsleftoversonprimarywarehouse_ibfk_1");
             });
 
             modelBuilder.Entity<LeftoversInStore>(entity =>
             {
-                entity.ToTable("LeftoversInStore");
-
                 entity.HasIndex(e => e.ProductId, "ProductId");
 
                 entity.HasIndex(e => e.StoreId, "StoreId");
@@ -250,18 +256,18 @@ namespace Store.Data
                     .WithMany(p => p.LeftoversInStores)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("leftoversinstore_ibfk_1");
+                    .HasConstraintName("leftoversinstores_ibfk_1");
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.LeftoversInStores)
                     .HasForeignKey(d => d.StoreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("leftoversinstore_ibfk_2");
+                    .HasConstraintName("leftoversinstores_ibfk_2");
             });
 
             modelBuilder.Entity<Manufacturer>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnType("int(11)");
+                entity.Property(e => e.Id).HasColumnType("bigint(20)");
 
                 entity.Property(e => e.ManufacturerName)
                     .IsRequired()
@@ -272,16 +278,22 @@ namespace Store.Data
 
             modelBuilder.Entity<Order>(entity =>
             {
+                entity.HasIndex(e => e.ClientAddressId, "ClientAddressId");
+
                 entity.Property(e => e.Id).HasColumnType("bigint(20)");
 
                 entity.Property(e => e.ClientAddressId).HasColumnType("bigint(20)");
 
-                entity.Property(e => e.IsCompleted).HasColumnType("bit(1)");
-
                 entity.Property(e => e.OrderingDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.ClientAddress)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.ClientAddressId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("orders_ibfk_1");
             });
 
-            modelBuilder.Entity<OrderItem>(entity =>
+            modelBuilder.Entity<OrdersItem>(entity =>
             {
                 entity.HasIndex(e => e.OrderId, "OrderId");
 
@@ -318,11 +330,13 @@ namespace Store.Data
 
                 entity.Property(e => e.Id).HasColumnType("bigint(20)");
 
-                entity.Property(e => e.CategoryId).HasColumnType("int(11)");
+                entity.Property(e => e.CategoryId).HasColumnType("bigint(20)");
 
-                entity.Property(e => e.ManufacturerId).HasColumnType("int(11)");
+                entity.Property(e => e.ManufacturerId).HasColumnType("bigint(20)");
 
-                entity.Property(e => e.ProductKindId).HasColumnType("int(11)");
+                entity.Property(e => e.Price).HasColumnType("double");
+
+                entity.Property(e => e.ProductKindId).HasColumnType("bigint(20)");
 
                 entity.Property(e => e.ProductName)
                     .IsRequired()
@@ -349,9 +363,9 @@ namespace Store.Data
                     .HasConstraintName("products_ibfk_3");
             });
 
-            modelBuilder.Entity<ProductKind>(entity =>
+            modelBuilder.Entity<ProductsKind>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnType("int(11)");
+                entity.Property(e => e.Id).HasColumnType("bigint(20)");
 
                 entity.Property(e => e.KindName)
                     .IsRequired()

@@ -3,11 +3,10 @@
 <html>
 <body>
     <form method="post" asp-controller="Orders" asp-action="Delete">
-        <label asp-for="Id">@Model.Id</label><br />
-        <label asp-for="ClientAddressId">@Model.ClientAddressId</label><br />
-        <label asp-for="IsCompleted">@Model.IsCompleted</label><br />
-        <label asp-for="OrderingDate">@Model.OrderingDate</label><br />
-        <input type="submit" value="Delete" /><br />
+        <h6>@Model.Id</h6><br />
+        <h6>@Model.ClientAddressId</h6><br />
+        <h6>@Model.OrderingDate</h6><br />
+        <input type="submit" value="Delete order" />
     </form>
 </body>
 </html>

@@ -1,10 +1,11 @@
-﻿@model ProductKind
+﻿@model ProductsKind
 <!DOCTYPE html>
 <html>
 <body>
     <form method="post" asp-controller="ProductsKinds" asp-action="Create">
-        <input asp-for="KindName" /><br />
-        <input type="submit" value="Add" /><br />
+        <input asp-for="KindName" placeholder="Kind name" /><br />
+
+        <input type="submit" value="Add product kind" />
     </form>
 </body>
 </html>

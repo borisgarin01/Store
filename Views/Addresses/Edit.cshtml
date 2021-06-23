@@ -1,0 +1,15 @@
+﻿@model Address
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Addresses" asp-action="Edit">
+        <input asp-for="City" placeholder="City" value="@Model.City" /><br />
+        <input asp-for="Country" placeholder="Country" value="@Model.Country" /><br />
+        <input asp-for="FlatNumber" placeholder="Flat number" value="@Model.FlatNumber" /><br />
+        <input asp-for="HouseNumber" placeholder="House number" value="@Model.HouseNumber" /><br />
+        <input asp-for="PostIndex" placeholder="Post index" value="@Model.PostIndex" /><br />
+        <input asp-for="Street" placeholder="Street" value="@Model.Street" /><br />
+        <button type="submit">Update address</button>
+    </form>
+</body>
+</html>

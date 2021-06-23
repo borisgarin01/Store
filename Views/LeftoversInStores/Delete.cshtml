@@ -3,11 +3,11 @@
 <html>
 <body>
     <form method="post" asp-controller="LeftoversInStores" asp-action="Delete">
-        <label asp-for="Id">@Model.Id</label><br />
-        <label asp-for="ProductId">@Model.ProductId</label><br />
-        <label asp-for="Quantity">@Model.Quantity</label><br />
-        <label asp-for="StoreId">@Model.StoreId</label><br />
-        <input type="submit" value="Delete" /><br />
+        <h6>@Model.Id</h6><br />
+        <h6>@Model.ProductId</h6><br />
+        <h6>@Model.Quantity</h6><br />
+        <h6>@Model.StoreId</h6><br />
+        <input type="submit" value="Delete leftovers in store" />
     </form>
 </body>
 </html>

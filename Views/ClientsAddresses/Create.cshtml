@@ -1,11 +1,11 @@
-﻿@model ClientAddress
+﻿@model ClientsAddress
 <!DOCTYPE html>
 <html>
 <body>
     <form method="post" asp-controller="ClientsAddresses" asp-action="Create">
-        <input asp-for="AddressId" /><br />
-        <input asp-for="ClientId" /><br />
-        <input type="submit" value="Add" /><br />
+        <input asp-for="AddressId" placeholder="Address Id" /><br />
+        <input asp-for="ClientId" placeholder="Client Id" /><br />
+        <input type="submit" value="Add client address" />
     </form>
 </body>
 </html>

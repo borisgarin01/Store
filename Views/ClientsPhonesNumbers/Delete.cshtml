@@ -1,12 +1,12 @@
-﻿@model ClientPhoneNumber
+﻿@model ClientsPhonesNumber
 <!DOCTYPE html>
 <html>
 <body>
     <form method="post" asp-controller="ClientsPhonesNumbers" asp-action="Delete">
-        <label asp-for="Id">@Model.Id</label><br />
-        <label asp-for="ClientId">@Model.ClientId</label><br />
-        <label asp-for="PhoneNumber">@Model.PhoneNumber</label><br />
-        <input type="submit" value="Delete" /><br />
+        <h6>@Model.Id</h6><br />
+        <h6>@Model.ClientId</h6><br />
+        <h6>@Model.PhoneNumber</h6><br />
+        <button type="submit">Delete</button>
     </form>
 </body>
 </html>

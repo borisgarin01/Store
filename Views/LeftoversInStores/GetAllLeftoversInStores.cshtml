@@ -1,0 +1,22 @@
+﻿@model List<LeftoversInStore>
+<!DOCTYPE html>
+<html>
+<body>
+
+    <form asp-controller="LeftoversInStores" asp-action="Index">
+        <a asp-action="Create">Create new leftover in store</a><br />
+
+        @foreach (LeftoversInStore leftoversInStore in Model)
+        {
+            <div>
+                Id: @leftoversInStore.Id<br />
+                Product Id: @leftoversInStore.ProductId<br />
+                Quantity: @leftoversInStore.Quantity<br />
+                Quantity: @leftoversInStore.StoreId<br />
+                <a asp-action="Edit" asp-route-id="@leftoversInStore.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@leftoversInStore.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

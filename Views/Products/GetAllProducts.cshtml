@@ -1,0 +1,25 @@
+﻿@model List<Product>
+<!DOCTYPE html>
+<html>
+<body>
+
+    <form asp-controller="Products" asp-action="Index">
+        <a asp-action="Create">Create new product</a><br />
+
+        @foreach (Product product in Model)
+        {
+            <div>
+                Id: @product.Id<br />
+                Category Id: @product.CategoryId<br />
+                Manufacturer Id: @product.ManufacturerId<br />
+                Price: @product.Price<br />
+                Product Kind Id: @product.ProductKindId<br />
+                Product Name: @product.ProductName<br />
+
+                <a asp-action="Edit" asp-route-id="@product.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@product.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

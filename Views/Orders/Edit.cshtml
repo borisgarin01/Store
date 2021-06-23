@@ -1,0 +1,12 @@
+﻿@model Order
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Orders" asp-action="Edit">
+        <input asp-for="ClientAddressId" placeholder="Client Address Id" value="@Model.ClientAddressId" /><br />
+        <input asp-for="OrderingDate" placeholder="Ordering Date" value="@Model.OrderingDate" /><br />
+
+        <button type="submit">Update order</button>
+    </form>
+</body>
+</html>

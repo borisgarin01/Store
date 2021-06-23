@@ -13,7 +13,7 @@ namespace Store.Models
             Products = new HashSet<Product>();
         }
 
-        public int Id { get; set; }
+        public long Id { get; set; }
         [Required][StringLength(255)]public string CategoryName { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }

@@ -11,18 +11,18 @@ namespace Store.Models
         public Client()
         {
             Carts = new HashSet<Cart>();
-            ClientsAddresses = new HashSet<ClientAddress>();
-            ClientsEmails = new HashSet<ClientEmail>();
-            ClientsPhonesNumbers = new HashSet<ClientPhoneNumber>();
+            ClientsAddresses = new HashSet<ClientsAddress>();
+            ClientsEmails = new HashSet<ClientsEmail>();
+            ClientsPhonesNumbers = new HashSet<ClientsPhonesNumber>();
         }
 
         public long Id { get; set; }
-        [Required][StringLength(255)]public string FirstName { get; set; }
-        [Required][StringLength(255)]public string LastName { get; set; }
+        [Required] [StringLength(255)] public string FirstName { get; set; }
+        [Required] [StringLength(255)] public string LastName { get; set; }
 
         public virtual ICollection<Cart> Carts { get; set; }
-        public virtual ICollection<ClientAddress> ClientsAddresses { get; set; }
-        public virtual ICollection<ClientEmail> ClientsEmails { get; set; }
-        public virtual ICollection<ClientPhoneNumber> ClientsPhonesNumbers { get; set; }
+        public virtual ICollection<ClientsAddress> ClientsAddresses { get; set; }
+        public virtual ICollection<ClientsEmail> ClientsEmails { get; set; }
+        public virtual ICollection<ClientsPhonesNumber> ClientsPhonesNumbers { get; set; }
     }
 }

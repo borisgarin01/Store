@@ -1,0 +1,22 @@
+﻿@model List<Order>
+<!DOCTYPE html>
+<html>
+<body>
+
+    <form asp-controller="Orders" asp-action="Index">
+        <a asp-action="Create">Create new order</a><br />
+
+        @foreach (Order order in Model)
+        {
+            <div>
+                Id: @order.Id<br />
+                Client Address Id: @order.ClientAddressId<br />
+                Ordering Date: @order.OrderingDate<br />
+
+                <a asp-action="Edit" asp-route-id="@order.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@order.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

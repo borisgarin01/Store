@@ -1,0 +1,10 @@
+﻿@model Store
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Stores" asp-action="Edit">
+        <input asp-for="AddressId" placeholder="Address Id" value="@Model.AddressId" /><br />
+        <button type="submit">Update store</button>
+    </form>
+</body>
+</html>

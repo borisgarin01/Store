@@ -1,0 +1,10 @@
+﻿@model Category
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="Categories" asp-action="Edit">
+        <input asp-for="CategoryName" placeholder="Category name" value="@Model.CategoryName" /><br />
+        <button type="submit">Update category</button>
+    </form>
+</body>
+</html>

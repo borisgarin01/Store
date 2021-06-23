@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -10,14 +9,14 @@ namespace Store.Models
     {
         public Order()
         {
-            OrdersItems = new HashSet<OrderItem>();
+            OrdersItems = new HashSet<OrdersItem>();
         }
 
         public long Id { get; set; }
-        public long ClientAddressId { get; set; }
         public DateTime OrderingDate { get; set; }
-        [Required]public bool? IsCompleted { get; set; }
+        public long ClientAddressId { get; set; }
 
-        public virtual ICollection<OrderItem> OrdersItems { get; set; }
+        public virtual ClientsAddress ClientAddress { get; set; }
+        public virtual ICollection<OrdersItem> OrdersItems { get; set; }
     }
 }

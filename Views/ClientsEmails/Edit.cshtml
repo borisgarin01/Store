@@ -1,0 +1,12 @@
+﻿@model ClientsEmail
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="ClientsEmails" asp-action="Create">
+        <input asp-for="ClientId" placeholder="Client Id" value="@Model.ClientId" /><br />
+        <input asp-for="EmailAddress" placeholder="Email address" value="@Model.EmailAddress" /><br />
+        <button type="submit">Update client email</button>
+
+    </form>
+</body>
+</html>

@@ -1,0 +1,20 @@
+﻿@model List<CommonProductsLeftoversOnPrimaryWarehouse>
+<!DOCTYPE html>
+<html>
+<body>
+
+    <form asp-controller="CommonProductsLeftoversOnPrimaryWarehouses" asp-action="Index">
+        <a asp-action="Create">Create new common products leftover on primary warehouse</a><br />
+        @foreach (CommonProductsLeftoversOnPrimaryWarehouse commonProductsLeftoversOnPrimaryWarehouse in Model)
+        {
+            <div>
+                Id: @commonProductsLeftoversOnPrimaryWarehouse.Id<br />
+                Product Id: @commonProductsLeftoversOnPrimaryWarehouse.ProductId<br />
+                Quantity: @commonProductsLeftoversOnPrimaryWarehouse.Quantity<br />
+                <a asp-action="Edit" asp-route-id="@commonProductsLeftoversOnPrimaryWarehouse.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@commonProductsLeftoversOnPrimaryWarehouse.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

@@ -1,12 +1,12 @@
-﻿@model CartItem
+﻿@model CartsItem
 <!DOCTYPE html>
 <html>
 <body>
     <form method="post" asp-controller="CartsItems" asp-action="Create">
-        <input asp-for="CartId" /><br />
-        <input asp-for="ProductId" /><br />
-        <input asp-for="Quantity" /><br />
-        <input type="submit" value="Add" /><br />
+        <input asp-for="CartId" placeholder="CartId" /><br />
+        <input asp-for="ProductId" placeholder="ProductId" /><br />
+        <input asp-for="Quantity" placeholder="Quantity" /><br />
+        <input type="submit" value="Add cart item" />
     </form>
 </body>
 </html>

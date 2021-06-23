@@ -1,0 +1,21 @@
+﻿@model List<Manufacturer>
+<!DOCTYPE html>
+<html>
+<body>
+    
+
+    <form asp-controller="Manufacturers" asp-action="Index">
+        <a asp-action="Create">Create new manufacturer</a><br />
+
+        @foreach (Manufacturer manufacturer in Model)
+        {
+            <div>
+                Id: @manufacturer.Id<br />
+                Manufacturer Name: @manufacturer.ManufacturerName<br />
+                <a asp-action="Edit" asp-route-id="@manufacturer.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@manufacturer.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

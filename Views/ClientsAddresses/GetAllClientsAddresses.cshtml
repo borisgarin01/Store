@@ -1,0 +1,21 @@
+﻿@model List<ClientsAddress>
+<!DOCTYPE html>
+<html>
+<body>
+    
+
+    <form asp-controller="ClientsAddresses" asp-action="Index">
+        <a asp-action="Create">Create new client address</a><br />
+        @foreach (ClientsAddress clientsAddress in Model)
+        {
+            <div>
+                Id: @clientsAddress.Id<br />
+                Address Id: @clientsAddress.AddressId<br />
+                Client Id: @clientsAddress.ClientId<br />
+                <a asp-action="Edit" asp-route-id="@clientsAddress.Id">Edit</a><br />
+                <a asp-action="Delete" asp-route-id="@clientsAddress.Id">Delete</a>
+            </div>
+        }
+    </form>
+</body>
+</html>

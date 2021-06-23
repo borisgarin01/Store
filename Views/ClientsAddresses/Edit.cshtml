@@ -1,0 +1,11 @@
+﻿@model ClientsAddress
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="ClientsAddresses" asp-action="Create">
+        <input asp-for="AddressId" placeholder="Address Id" value="@Model.AddressId" /><br />
+        <input asp-for="ClientId" placeholder="Client Id" value="@Model.ClientId" /><br />
+        <button type="submit">Update client address</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,11 @@
+﻿@model ProductsKind
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post" asp-controller="ProductsKinds" asp-action="Edit">
+        <input asp-for="KindName" placeholder="Kind name" value="@Model.KindName" /><br />
+
+        <button type="submit">Update product kind</button>
+    </form>
+</body>
+</html>

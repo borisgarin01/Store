@@ -9,13 +9,13 @@ namespace Store.Models
     {
         public Cart()
         {
-            CartsItems = new HashSet<CartItem>();
+            CartsItems = new HashSet<CartsItem>();
         }
 
         public long Id { get; set; }
         public long ClientId { get; set; }
 
         public virtual Client Client { get; set; }
-        public virtual ICollection<CartItem> CartsItems { get; set; }
+        public virtual ICollection<CartsItem> CartsItems { get; set; }
     }
 }
