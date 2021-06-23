@@ -1,68 +1,77 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
-using Store.Repositories.Interfaces;
-
-#nullable disable
 
 namespace Store.Controllers
 {
     public class ClientsPhonesNumbersController : Controller
     {
-        private IClientsPhonesNumbersRepository clientsPhonesNumbersRepository;
+        private StoreContext storeContext;
 
-        public ClientsPhonesNumbersController(IClientsPhonesNumbersRepository clientsPhonesNumbersRepo)
+        public ClientsPhonesNumbersController(StoreContext context)
         {
-            clientsPhonesNumbersRepository = clientsPhonesNumbersRepo;
+            storeContext = context;
         }
 
-        public async Task<IActionResult> Index()
+        [Route("ClientsPhonesNumbers")]
+        public async Task<IActionResult> GetAllClientsPhonesNumbers()
         {
-            return View(await clientsPhonesNumbersRepository.GetAll());
+            return View(await storeContext.ClientsPhonesNumbers.ToListAsync());
         }
 
         public IActionResult Create()
         {
-            return View(new ClientPhoneNumber());
+            return View(new ClientsPhonesNumber());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ClientPhoneNumber clientPhoneNumber)
+        public async Task<IActionResult> Create(ClientsPhonesNumber clientsPhonesNumber)
         {
-            await clientsPhonesNumbersRepository.Create(clientPhoneNumber);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.ClientsPhonesNumbers.Add(clientsPhonesNumber);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else return View(clientsPhonesNumber);
         }
 
-        public async Task<IActionResult> Find(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            return View(await clientsPhonesNumbersRepository.Get(id));
+            return View(await storeContext.ClientsPhonesNumbers.FirstAsync(a => a.Id == id));
         }
 
-        public async Task<IActionResult> Update(long id)
+        public async Task<IActionResult> Edit(long id)
         {
-            return View(await clientsPhonesNumbersRepository.Get(id));
+            return View(await storeContext.ClientsPhonesNumbers.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(ClientPhoneNumber clientPhoneNumber)
+        public async Task<IActionResult> Edit(ClientsPhonesNumber clientsPhonesNumber)
         {
-            await clientsPhonesNumbersRepository.Update(clientPhoneNumber);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.ClientsPhonesNumbers.Update(clientsPhonesNumber);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllClientsPhonesNumbers");
+            }
+            else return View(clientsPhonesNumber);
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await clientsPhonesNumbersRepository.Get(id));
+            return View(await storeContext.ClientsPhonesNumbers.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(ClientPhoneNumber clientPhoneNumber)
+        public async Task<IActionResult> Delete(ClientsPhonesNumber clientsPhonesNumber)
         {
-            await clientsPhonesNumbersRepository.Delete(clientPhoneNumber);
-            return RedirectToAction("Index");
+                storeContext.ClientsPhonesNumbers.Remove(clientsPhonesNumber);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllClientsPhonesNumbers");
         }
     }
 }

@@ -1,68 +1,77 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
-using Store.Repositories.Interfaces;
-
-#nullable disable
 
 namespace Store.Controllers
 {
     public class OrdersItemsController : Controller
     {
-        private IOrdersItemsRepository ordersItemsRepository;
+        private StoreContext storeContext;
 
-        public OrdersItemsController(IOrdersItemsRepository ordersItemsRepo)
+        public OrdersItemsController(StoreContext context)
         {
-            ordersItemsRepository = ordersItemsRepo;
+            storeContext = context;
         }
 
-        public async Task<IActionResult> Index()
+        [Route("OrdersItems")]
+        public async Task<IActionResult> GetAllOrdersItems()
         {
-            return View(await ordersItemsRepository.GetAll());
+            return View(await storeContext.OrdersItems.ToListAsync());
         }
 
         public IActionResult Create()
         {
-            return View(new Order());
+            return View(new OrdersItem());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(OrderItem orderItem)
+        public async Task<IActionResult> Create(OrdersItem ordersItem)
         {
-            await ordersItemsRepository.Create(orderItem);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.OrdersItems.Add(ordersItem);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else return View(ordersItem);
         }
 
-        public async Task<IActionResult> Find(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            return View(await ordersItemsRepository.Get(id));
+            return View(await storeContext.OrdersItems.FirstAsync(a => a.Id == id));
         }
 
-        public async Task<IActionResult> Update(long id)
+        public async Task<IActionResult> Edit(long id)
         {
-            return View(await ordersItemsRepository.Get(id));
+            return View(await storeContext.OrdersItems.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(OrderItem orderItem)
+        public async Task<IActionResult> Edit(OrdersItem ordersItem)
         {
-            await ordersItemsRepository.Update(orderItem);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.OrdersItems.Update(ordersItem);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllOrdersItems");
+            }
+            else return View(ordersItem);
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await ordersItemsRepository.Get(id));
+            return View(await storeContext.OrdersItems.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(OrderItem orderItem)
+        public async Task<IActionResult> Delete(OrdersItem ordersItem)
         {
-            await ordersItemsRepository.Delete(orderItem);
-            return RedirectToAction("Index");
+                storeContext.OrdersItems.Remove(ordersItem);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllOrdersItems");
         }
     }
 }

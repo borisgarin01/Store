@@ -5,63 +5,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Models\" />
     <None Remove="Microsoft.EntityFrameworkCore" />
     <None Remove="MySql.Data" />
-    <None Remove="Data\" />
     <None Remove="Pomelo.EntityFrameworkCore.MySql" />
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Microsoft.EntityFrameworkCore.Tools" />
     <None Remove="Microsoft.EntityFrameworkCore.Relational" />
-    <None Remove="Controllers\" />
-    <None Remove="Repositories\" />
-    <None Remove="Repositories\Interfaces\" />
-    <None Remove="Repositories\Classes\" />
     <None Remove="Views\CommonProductLeftoversOnPrimaryWarehouse\" />
-    <None Remove="Areas\" />
-    <None Remove="Areas\Regular\Views\" />
-    <None Remove="Areas\Regular\Views\Addresses\" />
-    <None Remove="Areas\Regular\Views\Carts\" />
-    <None Remove="Areas\Regular\Views\CartsItems\" />
-    <None Remove="Areas\Regular\Views\Categories\" />
-    <None Remove="Areas\Regular\Views\Clients\" />
-    <None Remove="Areas\Regular\Views\ClientsAddresses\" />
-    <None Remove="Areas\Regular\Views\ClientsEmails\" />
-    <None Remove="Areas\Regular\Views\ClientsPhonesNumbers\" />
-    <None Remove="Areas\Regular\Views\CommonProductsLeftoversOnPrimaryWarehouse\" />
-    <None Remove="Areas\Regular\Views\LeftoversInStores\" />
-    <None Remove="Areas\Regular\Views\Manufacturers\" />
-    <None Remove="Areas\Regular\Views\Orders\" />
-    <None Remove="Areas\Regular\Views\OrdersItems\" />
-    <None Remove="Areas\Regular\Views\Products\" />
-    <None Remove="Areas\Regular\Views\ProductsKinds\" />
-    <None Remove="Areas\Regular\Views\Stores\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Data\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Repositories\Interfaces\" />
-    <Folder Include="Repositories\Classes\" />
-    <Folder Include="Areas\" />
-    <Folder Include="Areas\Regular\Views\" />
-    <Folder Include="Areas\Regular\Views\Addresses\" />
-    <Folder Include="Areas\Regular\Views\Carts\" />
-    <Folder Include="Areas\Regular\Views\CartsItems\" />
-    <Folder Include="Areas\Regular\Views\Categories\" />
-    <Folder Include="Areas\Regular\Views\Clients\" />
-    <Folder Include="Areas\Regular\Views\ClientsAddresses\" />
-    <Folder Include="Areas\Regular\Views\ClientsEmails\" />
-    <Folder Include="Areas\Regular\Views\ClientsPhonesNumbers\" />
-    <Folder Include="Areas\Regular\Views\CommonProductsLeftoversOnPrimaryWarehouse\" />
-    <Folder Include="Areas\Regular\Views\LeftoversInStores\" />
-    <Folder Include="Areas\Regular\Views\Manufacturers\" />
-    <Folder Include="Areas\Regular\Views\Orders\" />
-    <Folder Include="Areas\Regular\Views\OrdersItems\" />
-    <Folder Include="Areas\Regular\Views\Products\" />
-    <Folder Include="Areas\Regular\Views\ProductsKinds\" />
-    <Folder Include="Areas\Regular\Views\Stores\" />
+    <None Remove="Data\" />
+    <None Remove="Controllers\" />
+    <None Remove="Views\" />
+    <None Remove="Repositories\" />
+    <None Remove="Views\Addresses\" />
+    <None Remove="Views\Carts\" />
+    <None Remove="Views\CartsItems\" />
+    <None Remove="Views\Categories\" />
+    <None Remove="Views\ClientsAddresses\" />
+    <None Remove="Views\Clients\" />
+    <None Remove="Views\ClientsEmails\" />
+    <None Remove="Views\ClientsPhonesNumbers\" />
+    <None Remove="Views\CommonProductsLeftoversOnPrimaryWarehouses\" />
+    <None Remove="Views\LeftoversInStores\" />
+    <None Remove="Views\Manufacturers\" />
+    <None Remove="Views\Orders\" />
+    <None Remove="Views\OrdersItems\" />
+    <None Remove="Views\Products\" />
+    <None Remove="Views\ProductsKinds\" />
+    <None Remove="Views\Stores\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.7" />
@@ -76,5 +46,27 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0" />
     <PackageReference Include="MySql.Data" Version="8.0.25" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Views\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Views\Addresses\" />
+    <Folder Include="Views\Carts\" />
+    <Folder Include="Views\CartsItems\" />
+    <Folder Include="Views\Categories\" />
+    <Folder Include="Views\ClientsAddresses\" />
+    <Folder Include="Views\Clients\" />
+    <Folder Include="Views\ClientsEmails\" />
+    <Folder Include="Views\ClientsPhonesNumbers\" />
+    <Folder Include="Views\CommonProductsLeftoversOnPrimaryWarehouses\" />
+    <Folder Include="Views\LeftoversInStores\" />
+    <Folder Include="Views\Manufacturers\" />
+    <Folder Include="Views\Orders\" />
+    <Folder Include="Views\OrdersItems\" />
+    <Folder Include="Views\Products\" />
+    <Folder Include="Views\ProductsKinds\" />
+    <Folder Include="Views\Stores\" />
   </ItemGroup>
 </Project>

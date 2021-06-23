@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
-using Store.Repositories.Interfaces;
-
-#nullable disable
 
 namespace Store.Controllers
 {
     public class ClientsController : Controller
     {
-        private IClientsRepository clientsRepository;
+        private StoreContext storeContext;
 
-        public ClientsController(IClientsRepository clientsRepo)
+        public ClientsController(StoreContext context)
         {
-            clientsRepository = clientsRepo;
+            storeContext = context;
         }
 
-        public async Task<IActionResult> Index()
+        [Route("Clients")]
+        public async Task<IActionResult> GetAllClients()
         {
-            return View(await clientsRepository.GetAll());
+            return View(await storeContext.Clients.ToListAsync());
         }
 
         public IActionResult Create()
@@ -32,37 +30,48 @@ namespace Store.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Client client)
         {
-            await clientsRepository.Create(client);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.Clients.Add(client);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else return View(client);
         }
 
-        public async Task<IActionResult> Find(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            return View(await clientsRepository.Get(id));
+            return View(await storeContext.Clients.FirstAsync(a => a.Id == id));
         }
 
-        public async Task<IActionResult> Update(long id)
+        public async Task<IActionResult> Edit(long id)
         {
-            return View(await clientsRepository.Get(id));
+            return View(await storeContext.Clients.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Client client)
+        public async Task<IActionResult> Edit(Client client)
         {
-            await clientsRepository.Update(client);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.Clients.Update(client);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllClients");
+            }
+            else return View(client);
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await clientsRepository.Get(id));
+            return View(await storeContext.Clients.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Client client)
         {
-            await clientsRepository.Delete(client);
-            return RedirectToAction("Index");
+                storeContext.Clients.Remove(client);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllClients");
         }
     }
 }

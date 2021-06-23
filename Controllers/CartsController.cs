@@ -1,26 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
-using Store.Repositories.Interfaces;
-
-#nullable disable
 
 namespace Store.Controllers
 {
     public class CartsController : Controller
     {
-        private ICartsRepository cartsRepository;
+        private StoreContext storeContext;
 
-        public CartsController(ICartsRepository cartsRepo)
+        public CartsController(StoreContext context)
         {
-            cartsRepository = cartsRepo;
+            storeContext = context;
         }
 
-        public async Task<IActionResult> Index()
+        [Route("Carts")]
+        public async Task<IActionResult> GetAllCarts()
         {
-            return View(await cartsRepository.GetAll());
+            return View(await storeContext.Carts.ToListAsync());
         }
 
         public IActionResult Create()
@@ -31,38 +30,48 @@ namespace Store.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Cart cart)
         {
-            await cartsRepository.Create(cart);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.Carts.Add(cart);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else return View(cart);
         }
 
-
-        public async Task<IActionResult> Find(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            return View(await cartsRepository.Get(id));
+            return View(await storeContext.Carts.FirstAsync(a => a.Id == id));
         }
 
-        public async Task<IActionResult> Update(long id)
+        public async Task<IActionResult> Edit(long id)
         {
-            return View(await cartsRepository.Get(id));
+            return View(await storeContext.Carts.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Cart cart)
+        public async Task<IActionResult> Edit(Cart cart)
         {
-            await cartsRepository.Update(cart);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.Carts.Update(cart);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllCarts");
+            }
+            else return View(cart);
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await cartsRepository.Get(id));
+            return View(await storeContext.Carts.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Cart cart)
         {
-            await cartsRepository.Delete(cart);
-            return RedirectToAction("Index");
+            storeContext.Carts.Remove(cart);
+            await storeContext.SaveChangesAsync();
+            return RedirectToAction("GetAllCarts");
         }
     }
 }

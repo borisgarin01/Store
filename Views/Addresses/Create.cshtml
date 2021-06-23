@@ -3,13 +3,13 @@
 <html>
 <body>
     <form method="post" asp-controller="Addresses" asp-action="Create">
-        <input asp-for="City" /><br />
-        <input asp-for="Country" /><br />
-        <input asp-for="FlatNumber" /><br />
-        <input asp-for="HouseNumber" /><br />
-        <input asp-for="PostIndex" /><br />
-        <input asp-for="Street" /><br />
-        <input type="submit" value="Add" /><br />
+        <input asp-for="City" placeholder="City" /><br />
+        <input asp-for="Country" placeholder="Country" /><br />
+        <input asp-for="FlatNumber" placeholder="Flat number" /><br />
+        <input asp-for="HouseNumber" placeholder="House number" /><br />
+        <input asp-for="PostIndex" placeholder="Post index" /><br />
+        <input asp-for="Street" placeholder="Street" /><br />
+        <input type="submit" value="Add address" />
     </form>
 </body>
 </html>

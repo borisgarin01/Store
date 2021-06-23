@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
-using Store.Repositories.Interfaces;
-
-#nullable disable
 
 namespace Store.Controllers
 {
     public class ManufacturersController : Controller
     {
-        private IManufacturersRepository manufacturersRepository;
+        private StoreContext storeContext;
 
-        public ManufacturersController(IManufacturersRepository manufacturersRepo)
+        public ManufacturersController(StoreContext context)
         {
-            manufacturersRepository = manufacturersRepo;
+            storeContext = context;
         }
 
-        public async Task<IActionResult> Index()
+        [Route("Manufacturers")]
+        public async Task<IActionResult> GetAllManufacturers()
         {
-            return View(await manufacturersRepository.GetAll());
+            return View(await storeContext.Manufacturers.ToListAsync());
         }
 
         public IActionResult Create()
@@ -32,37 +30,48 @@ namespace Store.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Manufacturer manufacturer)
         {
-            await manufacturersRepository.Create(manufacturer);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.Manufacturers.Add(manufacturer);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else return View(manufacturer);
         }
 
-        public async Task<IActionResult> Find(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            return View(await manufacturersRepository.Get(id));
+            return View(await storeContext.Manufacturers.FirstAsync(a => a.Id == id));
         }
 
-        public async Task<IActionResult> Update(long id)
+        public async Task<IActionResult> Edit(long id)
         {
-            return View(await manufacturersRepository.Get(id));
+            return View(await storeContext.Manufacturers.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Manufacturer manufacturer)
+        public async Task<IActionResult> Edit(Manufacturer manufacturer)
         {
-            await manufacturersRepository.Update(manufacturer);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.Manufacturers.Update(manufacturer);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllManufacturers");
+            }
+            else return View(manufacturer);
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await manufacturersRepository.Get(id));
+            return View(await storeContext.Manufacturers.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Manufacturer manufacturer)
         {
-            await manufacturersRepository.Delete(manufacturer);
-            return RedirectToAction("Index");
+                storeContext.Manufacturers.Remove(manufacturer);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllManufacturers");
         }
     }
 }

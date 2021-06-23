@@ -1,68 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
-using Store.Repositories.Interfaces;
-
-#nullable disable
 
 namespace Store.Controllers
 {
     public class ProductsKindsController : Controller
     {
-        private IProductsKindsRepository productsKindsRepository;
+        private StoreContext storeContext;
 
-        public ProductsKindsController(IProductsKindsRepository productsKindsRepo)
+        public ProductsKindsController(StoreContext context)
         {
-            productsKindsRepository = productsKindsRepo;
+            storeContext = context;
         }
 
-        public async Task<IActionResult> Index()
+        [Route("ProductsKinds")]
+        public async Task<IActionResult> GetAllProductsKinds()
         {
-            return View(await productsKindsRepository.GetAll());
+            return View(await storeContext.ProductsKinds.ToListAsync());
         }
-
+        
         public IActionResult Create()
         {
-            return View(new ProductKind());
+            return View(new ProductsKind());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ProductKind productKind)
+        public async Task<IActionResult> Create(ProductsKind productsKind)
         {
-            await productsKindsRepository.Create(productKind);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.ProductsKinds.Add(productsKind);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else return View(productsKind);
         }
 
-        public async Task<IActionResult> Find(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            return View(await productsKindsRepository.Get(id));
+            return View(await storeContext.ProductsKinds.FirstAsync(a => a.Id == id));
         }
 
-        public async Task<IActionResult> Update(long id)
+        public async Task<IActionResult> Edit(long id)
         {
-            return View(await productsKindsRepository.Get(id));
+            return View(await storeContext.ProductsKinds.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(ProductKind productKind)
+        public async Task<IActionResult> Edit(ProductsKind productsKind)
         {
-            await productsKindsRepository.Update(productKind);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.ProductsKinds.Update(productsKind);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllProductsKinds");
+            }
+            else return View(productsKind);
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await productsKindsRepository.Get(id));
+            return View(await storeContext.ProductsKinds.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(ProductKind productKind)
+        public async Task<IActionResult> Delete(ProductsKind productsKind)
         {
-            await productsKindsRepository.Delete(productKind);
-            return RedirectToAction("Index");
+            List<Product> productsToDelete = storeContext.Products.Where(p=>p.ProductKindId==productsKind.Id).ToList();
+            foreach(Product product in productsToDelete)
+            {
+                storeContext.CartsItems.RemoveRange(storeContext.CartsItems.Where(ci => ci.ProductId == product.Id));
+                storeContext.CommonProductsLeftoversOnPrimaryWarehouses.RemoveRange(storeContext.CommonProductsLeftoversOnPrimaryWarehouses.Where(ci => ci.ProductId == product.Id));
+                storeContext.LeftoversInStores.RemoveRange(storeContext.LeftoversInStores.Where(ci => ci.ProductId == product.Id));
+                storeContext.OrdersItems.RemoveRange(storeContext.OrdersItems.Where(ci => ci.ProductId == product.Id));
+            }
+            storeContext.Products.RemoveRange(productsToDelete);
+            storeContext.ProductsKinds.Remove(productsKind);
+            await storeContext.SaveChangesAsync();
+            return RedirectToAction("GetAllProductsKinds");
         }
     }
 }

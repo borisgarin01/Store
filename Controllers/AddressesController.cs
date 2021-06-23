@@ -1,27 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
-using Store.Repositories.Interfaces;
-
-#nullable disable
 
 namespace Store.Controllers
 {
-    public class AddressesController : Controller
+    public class AddressesController:Controller
     {
-        private IAddressesRepository addressesRepository;
+        private StoreContext storeContext;
 
-        public AddressesController(IAddressesRepository addressesRepo)
+        public AddressesController(StoreContext context)
         {
-            addressesRepository = addressesRepo;
+            storeContext = context;
         }
 
-        public async Task<IActionResult> Index()
+        [Route("Addresses")]
+        public async Task<IActionResult> GetAllAddresses()
         {
-            return View(await addressesRepository.GetAll());
+            return View(await storeContext.Addresses.ToListAsync());
         }
 
         public IActionResult Create()
@@ -30,39 +28,51 @@ namespace Store.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Address address)
+        public async Task<IActionResult>Create(Address address)
         {
-            await addressesRepository.Create(address);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.Addresses.Add(address);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else return View(address);
         }
 
-        public async Task<IActionResult> Find(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            return View(await addressesRepository.Get(id));
+            return View(await storeContext.Addresses.FirstAsync(a=>a.Id==id));
         }
 
-        public async Task<IActionResult> Update(long id)
+        public async Task<IActionResult> Edit(long id)
         {
-            return View(await addressesRepository.Get(id));
+            return View(await storeContext.Addresses.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Address address)
+        public async Task<IActionResult> Edit(Address address)
         {
-            await addressesRepository.Update(address);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.Addresses.Update(address);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllAddresses");
+            }
+            else return View(address);
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await addressesRepository.Get(id));
+            return View(await storeContext.Addresses.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Address address)
         {
-            await addressesRepository.Delete(address);
-            return RedirectToAction("Index");
+
+            storeContext.Addresses.Remove(address);
+            await storeContext.SaveChangesAsync();
+            return RedirectToAction("GetAllAddresses");
         }
     }
 }

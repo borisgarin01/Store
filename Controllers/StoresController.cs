@@ -1,25 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Store.Repositories.Interfaces;
-
-#nullable disable
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
+using Store.Models;
 
 namespace Store.Controllers
 {
     public class StoresController : Controller
     {
-        private IStoresRepository storesRepository;
+        private StoreContext storeContext;
 
-        public StoresController(IStoresRepository storesRepo)
+        public StoresController(StoreContext context)
         {
-            storesRepository = storesRepo;
+            storeContext = context;
         }
 
-        public async Task<IActionResult> Index()
+        [Route("Stores")]
+        public async Task<IActionResult> GetAllStores()
         {
-            return View(await storesRepository.GetAll());
+            return View(await storeContext.Stores.ToListAsync());
         }
 
         public IActionResult Create()
@@ -30,37 +30,48 @@ namespace Store.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Models.Store store)
         {
-            await storesRepository.Create(store);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.Stores.Add(store);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            else return View(store);
         }
 
-        public async Task<IActionResult> Find(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            return View(await storesRepository.Get(id));
+            return View(await storeContext.Stores.FirstAsync(a => a.Id == id));
         }
 
-        public async Task<IActionResult> Update(long id)
+        public async Task<IActionResult> Edit(long id)
         {
-            return View(await storesRepository.Get(id));
+            return View(await storeContext.Stores.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(Models.Store store)
+        public async Task<IActionResult> Edit(Models.Store store)
         {
-            await storesRepository.Update(store);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                storeContext.Stores.Update(store);
+                await storeContext.SaveChangesAsync();
+                return RedirectToAction("GetAllStores");
+            }
+            else return View(store);
         }
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storesRepository.Get(id));
+            return View(await storeContext.Stores.FirstAsync(a => a.Id == id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Models.Store store)
         {
-            await storesRepository.Delete(store);
-            return RedirectToAction("Index");
+            storeContext.Stores.Remove(store);
+            await storeContext.SaveChangesAsync();
+            return RedirectToAction("GetAllStores");
         }
     }
 }
