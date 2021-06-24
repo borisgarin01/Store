@@ -3,10 +3,10 @@
 <html>
 <body>
     <form method="post" asp-controller="Products" asp-action="Create">
-        <input asp-for="CategoryId" placeholder="Category Id" /><br />
-        <input asp-for="ManufacturerId" placeholder="Manufacturer Id" /><br />
+        <select asp-for="CategoryId" asp-items="ViewBag.Categories"></select><br />
+        <select asp-for="ManufacturerId" asp-items="ViewBag.Manufacturers"></select><br />
         <input asp-for="Price" placeholder="Price" /><br />
-        <input asp-for="ProductKindId" placeholder="Product Kind Id" /><br />
+        <select asp-for="ProductKindId" asp-items="ViewBag.ProductsKinds"></select><br />
         <input asp-for="ProductName" placeholder="Product Name" /><br />
         <input type="submit" value="Add product" />
     </form>

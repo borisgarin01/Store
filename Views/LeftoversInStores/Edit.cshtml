@@ -3,9 +3,9 @@
 <html>
 <body>
     <form method="post" asp-controller="LeftoversInStores" asp-action="Edit">
-        <input asp-for="ProductId" placeholder="Product Id" value="@Model.ProductId" /><br />
+        <select asp-for="ProductId" asp-items="ViewBag.Products"></select><br />
         <input asp-for="Quantity" placeholder="Quantity" value="@Model.Quantity" /><br />
-        <input asp-for="StoreId" placeholder="Store Id" value="@Model.StoreId" /><br />
+        <select asp-for="StoreId" asp-items="ViewBag.Stores"></select><br />
         <button type="submit">Update leftovers in store</button>
     </form>
 </body>

@@ -3,7 +3,12 @@
 <html>
 <body>
     <form method="post" asp-controller="ClientsPhonesNumbers" asp-action="Create">
-        <input asp-for="ClientId" placeholder="Client Id" /><br />
+        <select asp-for="ClientId">
+            @foreach(Client client in ViewBag.Clients)
+            {
+                <option value="@client.Id">@client.FirstName @client.LastName</option>
+            }
+            </select><br />
         <input asp-for="PhoneNumber" placeholder="Phone number" /><br />
         <input type="submit" value="Add client phone number" />
     </form>

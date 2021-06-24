@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Store.Data;
+using Store.Repositories.Classes;
+using Store.Repositories.Interfaces;
 
 namespace Store
 {
@@ -25,9 +27,27 @@ namespace Store
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(mvcOptions => mvcOptions.EnableEndpointRouting = false);
+
             services.AddDbContext<StoreContext>
                 (a => a.UseMySql("server=localhost;user=root;password=Cyber2001;database=Store;",
                 new MySqlServerVersion(new Version(8, 0, 18))));
+
+            services.AddTransient<IAddressesRepository, AddressesRepository>();
+            services.AddTransient<ICartsItemsRepository, CartsItemsRepository>();
+            services.AddTransient<ICartsRepository, CartsRepository>();
+            services.AddTransient<ICategoriesRepository, CategoriesRepository>();
+            services.AddTransient<IClientsAddressesRepository, ClientsAddressesRepository>();
+            services.AddTransient<IClientsEmailsRepository, ClientsEmailsRepository>();
+            services.AddTransient<IClientsPhonesNumbersRepository, ClientsPhonesNumbersRepository>();
+            services.AddTransient<IClientsRepository, ClientsRepository>();
+            services.AddTransient<ICommonProductsLeftoversOnPrimaryWarehouseRepository, CommonProductsLeftoversOnPrimaryWarehouseRepository>();
+            services.AddTransient<ILeftoversInStoresRepository,LeftoversInStoresRepository>();
+            services.AddTransient<IManufacturersRepository, ManufacturersRepository>();
+            services.AddTransient<IOrdersItemsRepository, OrdersItemsRepository>();
+            services.AddTransient<IOrdersRepository, OrdersRepository>();
+            services.AddTransient<IProductsKindsRepository, ProductsKindsRepository>();
+            services.AddTransient<IProductsRepository, ProductsRepository>();
+            services.AddTransient<IStoresRepository, StoresRepository>();
         }
 
         private IConfiguration Configuration { get; set; }

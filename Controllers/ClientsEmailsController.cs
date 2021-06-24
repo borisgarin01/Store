@@ -22,8 +22,9 @@ namespace Store.Controllers
             return View(await storeContext.ClientsEmails.ToListAsync());
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Clients = await storeContext.Clients.ToListAsync();
             return View(new ClientsEmail());
         }
 
@@ -46,6 +47,7 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Edit(long id)
         {
+            ViewBag.Clients = await storeContext.Clients.ToListAsync();
             return View(await storeContext.ClientsEmails.FirstAsync(a => a.Id == id));
         }
 

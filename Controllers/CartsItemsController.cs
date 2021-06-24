@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
@@ -22,8 +23,10 @@ namespace Store.Controllers
             return View(await storeContext.CartsItems.ToListAsync());
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Carts = new SelectList(await storeContext.Carts.ToListAsync(), "Id", "ClientId");
+            ViewBag.Products = new SelectList(await storeContext.Products.ToListAsync(), "Id", "ProductName");
             return View(new CartsItem());
         }
 
@@ -46,6 +49,8 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Edit(long id)
         {
+            ViewBag.Carts = new SelectList(await storeContext.Carts.ToListAsync(), "Id", "ClientId");
+            ViewBag.Products = new SelectList(await storeContext.Products.ToListAsync(), "Id", "ProductName");
             return View(await storeContext.CartsItems.FirstAsync(a => a.Id == id));
         }
 

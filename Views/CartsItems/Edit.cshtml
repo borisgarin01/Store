@@ -3,9 +3,9 @@
 <html>
 <body>
     <form method="post" asp-controller="CartsItems" asp-action="Edit">
-        <input asp-for="CartId" placeholder="CartId" value="@Model.CartId" /><br />
-        <input asp-for="ProductId" placeholder="ProductId" value="@Model.ProductId" /><br />
-        <input asp-for="Quantity" placeholder="Quantity" value="@Model.Quantity" /><br />
+        <select asp-for="CartId" asp-items="ViewBag.Carts"></select><br />
+        <select asp-for="ProductId" asp-items="ViewBag.Products"></select><br />
+        <input asp-for="Quantity" placeholder="Quantity" value=@Model.Quantity /><br />
         <button type="submit">Update cart item</button>
     </form>
 </body>

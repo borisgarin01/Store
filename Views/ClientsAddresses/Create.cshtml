@@ -3,8 +3,18 @@
 <html>
 <body>
     <form method="post" asp-controller="ClientsAddresses" asp-action="Create">
-        <input asp-for="AddressId" placeholder="Address Id" /><br />
-        <input asp-for="ClientId" placeholder="Client Id" /><br />
+        <select asp-for="AddressId">
+            @foreach (Address address in ViewBag.Addresses)
+            {
+                <option value="@address.Id">@address.PostIndex @address.Country @address.City @address.Street @address.HouseNumber @address.FlatNumber</option>
+            }
+        </select>
+        <select asp-for="ClientId">
+            @foreach (Client client in ViewBag.Clients)
+            {
+                <option value="@client.Id">@client.FirstName @client.LastName</option>
+            }
+        </select>
         <input type="submit" value="Add client address" />
     </form>
 </body>

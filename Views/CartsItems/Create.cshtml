@@ -3,8 +3,8 @@
 <html>
 <body>
     <form method="post" asp-controller="CartsItems" asp-action="Create">
-        <input asp-for="CartId" placeholder="CartId" /><br />
-        <input asp-for="ProductId" placeholder="ProductId" /><br />
+        <select asp-for="CartId" asp-items="ViewBag.Carts"></select><br />
+        <select asp-for="ProductId" asp-items="ViewBag.Products"></select><br />
         <input asp-for="Quantity" placeholder="Quantity" /><br />
         <input type="submit" value="Add cart item" />
     </form>

@@ -22,8 +22,10 @@ namespace Store.Controllers
             return View(await storeContext.ClientsAddresses.ToListAsync());
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Addresses = await storeContext.Addresses.ToListAsync();
+            ViewBag.Clients = await storeContext.Clients.ToListAsync();
             return View(new ClientsAddress());
         }
 
@@ -46,6 +48,8 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Edit(long id)
         {
+            ViewBag.Addresses = await storeContext.Addresses.ToListAsync();
+            ViewBag.Clients = await storeContext.Clients.ToListAsync();
             return View(await storeContext.ClientsAddresses.FirstAsync(a => a.Id == id));
         }
 

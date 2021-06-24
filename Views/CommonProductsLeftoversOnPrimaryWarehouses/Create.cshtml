@@ -3,7 +3,7 @@
 <html>
 <body>
     <form method="post" asp-controller="CommonProductsLeftoversOnPrimaryWarehouses" asp-action="Create">
-        <input asp-for="ProductId" placeholder="Product Id" /><br />
+        <select asp-for="ProductId" asp-items="ViewBag.Products"></select><br />
         <input asp-for="Quantity" placeholder="Quantity" /><br />
         <input type="submit" value="Add common products leftovers on primary warehouses" />
     </form>

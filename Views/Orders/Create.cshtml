@@ -3,7 +3,7 @@
 <html>
 <body>
     <form method="post" asp-controller="Orders" asp-action="Create">
-        <input asp-for="ClientAddressId" placeholder="Client Address Id" /><br />
+        <select asp-for="ClientAddressId" asp-items="ViewBag.ClientsAddresses"></select><br />
         <input asp-for="OrderingDate" placeholder="Ordering Date" /><br />
 
         <input type="submit" value="Add order" />

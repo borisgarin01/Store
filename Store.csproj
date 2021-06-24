@@ -32,6 +32,9 @@
     <None Remove="Views\Products\" />
     <None Remove="Views\ProductsKinds\" />
     <None Remove="Views\Stores\" />
+    <None Remove="Repositories\Interfaces\" />
+    <None Remove="Repositories\Classes\" />
+    <None Remove="Repositories\Interfaces\Base\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.7" />
@@ -68,5 +71,8 @@
     <Folder Include="Views\Products\" />
     <Folder Include="Views\ProductsKinds\" />
     <Folder Include="Views\Stores\" />
+    <Folder Include="Repositories\Interfaces\" />
+    <Folder Include="Repositories\Classes\" />
+    <Folder Include="Repositories\Interfaces\Base\" />
   </ItemGroup>
 </Project>

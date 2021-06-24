@@ -3,7 +3,12 @@
 <html>
 <body>
     <form method="post" asp-controller="ClientsEmails" asp-action="Create">
-        <input asp-for="ClientId" placeholder="Client Id" value="@Model.ClientId" /><br />
+        <select asp-for="ClientId">
+            @foreach (Client client in ViewBag.Clients)
+            {
+                <option value="@client.Id">@client.FirstName @client.LastName</option>
+            }
+        </select><br />
         <input asp-for="EmailAddress" placeholder="Email address" value="@Model.EmailAddress" /><br />
         <button type="submit">Update client email</button>
 

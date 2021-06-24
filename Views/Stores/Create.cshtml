@@ -3,7 +3,12 @@
 <html>
 <body>
     <form method="post" asp-controller="Stores" asp-action="Create">
-        <input asp-for="AddressId" placeholder="Address Id" /><br />
+        <select asp-for="AddressId">
+            @foreach (Address address in ViewBag.Addresses)
+            {
+                <option value="@address.Id">@address.PostIndex @address.Country @address.City @address.Street @address.HouseNumber @address.FlatNumber</option>
+            }
+        </select>
         <input type="submit" value="Add product kind" />
     </form>
 </body>
