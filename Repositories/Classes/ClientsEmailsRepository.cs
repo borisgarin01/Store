@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
 using Store.Repositories.Interfaces;
 
@@ -8,33 +10,39 @@ namespace Store.Repositories.Classes
 {
     public class ClientsEmailsRepository:IClientsEmailsRepository
     {
-        public ClientsEmailsRepository()
+        private StoreContext storeContext;
+
+        public ClientsEmailsRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(ClientsEmail item)
+        public async Task Create(ClientsEmail clientsEmail)
         {
-            throw new NotImplementedException();
+            storeContext.ClientsEmails.Add(clientsEmail);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(ClientsEmail item)
+        public async Task Delete(ClientsEmail clientsEmail)
         {
-            throw new NotImplementedException();
+            storeContext.ClientsEmails.Remove(clientsEmail);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<ClientsEmail> Get(long id)
+        public async Task<ClientsEmail> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.ClientsEmails.FirstOrDefaultAsync(clientEmail => clientEmail.Id == id);
         }
 
-        public Task<IEnumerable<ClientsEmail>> GetAll()
+        public async Task<IEnumerable<ClientsEmail>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.ClientsEmails.ToListAsync();
         }
 
-        public Task Update(ClientsEmail item)
+        public async Task Update(ClientsEmail clientsEmail)
         {
-            throw new NotImplementedException();
+            storeContext.ClientsEmails.Update(clientsEmail);
+            await storeContext.SaveChangesAsync();
         }
     }
 }

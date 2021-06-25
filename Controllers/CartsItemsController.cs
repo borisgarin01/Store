@@ -5,28 +5,35 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class CartsItemsController : Controller
     {
-        private StoreContext storeContext;
+        private ICartsItemsRepository cartsItemsRepository;
+        private ICartsRepository cartsRepository;
+        private IProductsRepository productsRepository;
 
-        public CartsItemsController(StoreContext context)
+        public CartsItemsController(ICartsItemsRepository cartsItemsRepo,
+            ICartsRepository cartsRepo,
+            IProductsRepository productsRepo)
         {
-            storeContext = context;
+            cartsItemsRepository = cartsItemsRepo;
+            cartsRepository = cartsRepo;
+            productsRepository = productsRepo;
         }
 
         [Route("CartsItems")]
         public async Task<IActionResult> GetAllCartsItems()
         {
-            return View(await storeContext.CartsItems.ToListAsync());
+            return View(await cartsItemsRepository.GetAll());
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Carts = new SelectList(await storeContext.Carts.ToListAsync(), "Id", "ClientId");
-            ViewBag.Products = new SelectList(await storeContext.Products.ToListAsync(), "Id", "ProductName");
+            ViewBag.Carts = new SelectList(await cartsRepository.GetAll(), "Id", "ClientId");
+            ViewBag.Products = new SelectList(await productsRepository.GetAll(), "Id", "ProductName");
             return View(new CartsItem());
         }
 
@@ -35,8 +42,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.CartsItems.Add(cartsItem);
-                await storeContext.SaveChangesAsync();
+                await cartsItemsRepository.Create(cartsItem);
                 return RedirectToAction("Index");
             }
             else return View(cartsItem);
@@ -44,14 +50,14 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.CartsItems.FirstAsync(a => a.Id == id));
+            return View(await cartsItemsRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            ViewBag.Carts = new SelectList(await storeContext.Carts.ToListAsync(), "Id", "ClientId");
-            ViewBag.Products = new SelectList(await storeContext.Products.ToListAsync(), "Id", "ProductName");
-            return View(await storeContext.CartsItems.FirstAsync(a => a.Id == id));
+            ViewBag.Carts = new SelectList(await cartsRepository.GetAll(), "Id", "ClientId");
+            ViewBag.Products = new SelectList(await productsRepository.GetAll(), "Id", "ProductName");
+            return View(await cartsItemsRepository.Get(id));
         }
 
         [HttpPost]
@@ -59,8 +65,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.CartsItems.Update(cartsItem);
-                await storeContext.SaveChangesAsync();
+                await cartsItemsRepository.Update(cartsItem);
                 return RedirectToAction("GetAllCartsItems");
             }
             else return View(cartsItem);
@@ -68,15 +73,14 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.CartsItems.FirstAsync(a => a.Id == id));
+            return View(await cartsItemsRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(CartsItem cartsItem)
         {
-                storeContext.CartsItems.Remove(cartsItem);
-                await storeContext.SaveChangesAsync();
-                return RedirectToAction("GetAllCartsItems");
+            await cartsItemsRepository.Delete(cartsItem);
+            return RedirectToAction("GetAllCartsItems");
         }
     }
 }

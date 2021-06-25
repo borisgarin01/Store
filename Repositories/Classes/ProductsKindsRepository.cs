@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
 using Store.Repositories.Interfaces;
 
@@ -8,33 +11,49 @@ namespace Store.Repositories.Classes
 {
     public class ProductsKindsRepository:IProductsKindsRepository
     {
-        public ProductsKindsRepository()
+        private StoreContext storeContext;
+
+        public ProductsKindsRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(ProductsKind item)
+        public async Task Create(ProductsKind productKind)
         {
-            throw new NotImplementedException();
+            storeContext.ProductsKinds.Add(productKind);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(ProductsKind item)
+        public async Task Delete(ProductsKind productsKind)
         {
-            throw new NotImplementedException();
+            List<Product> productsToDelete = storeContext.Products.Where(p => p.ProductKindId == productsKind.Id).ToList();
+            foreach (Product product in productsToDelete)
+            {
+                storeContext.CartsItems.RemoveRange(storeContext.CartsItems.Where(ci => ci.ProductId == product.Id));
+                storeContext.CommonProductsLeftoversOnPrimaryWarehouses.RemoveRange(storeContext.CommonProductsLeftoversOnPrimaryWarehouses.Where(ci => ci.ProductId == product.Id));
+                storeContext.LeftoversInStores.RemoveRange(storeContext.LeftoversInStores.Where(ci => ci.ProductId == product.Id));
+                storeContext.OrdersItems.RemoveRange(storeContext.OrdersItems.Where(ci => ci.ProductId == product.Id));
+            }
+            storeContext.Products.RemoveRange(productsToDelete);
+            storeContext.ProductsKinds.Remove(productsKind);
+            await storeContext.SaveChangesAsync();
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<ProductsKind> Get(long id)
+        public async Task<ProductsKind> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.ProductsKinds.FirstOrDefaultAsync(productKind => productKind.Id == id);
         }
 
-        public Task<IEnumerable<ProductsKind>> GetAll()
+        public async Task<IEnumerable<ProductsKind>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.ProductsKinds.ToListAsync();
         }
 
-        public Task Update(ProductsKind item)
+        public async Task Update(ProductsKind productKind)
         {
-            throw new NotImplementedException();
+            storeContext.ProductsKinds.Update(productKind);
+            await storeContext.SaveChangesAsync();
         }
     }
 }

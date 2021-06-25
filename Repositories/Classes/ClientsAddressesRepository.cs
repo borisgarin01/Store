@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
 using Store.Repositories.Interfaces;
 
@@ -8,33 +11,45 @@ namespace Store.Repositories.Classes
 {
     public class ClientsAddressesRepository:IClientsAddressesRepository
     {
-        public ClientsAddressesRepository()
+        private StoreContext storeContext;
+
+        public ClientsAddressesRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(ClientsAddress item)
+        public async Task Create(ClientsAddress clientsAddress)
         {
-            throw new NotImplementedException();
+            storeContext.ClientsAddresses.Add(clientsAddress);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(ClientsAddress item)
+        public async Task Delete(ClientsAddress clientsAddress)
         {
-            throw new NotImplementedException();
+            List<Order> orders = storeContext.Orders.Where(o => o.ClientAddressId == clientsAddress.Id).ToList();
+            foreach(Order order in storeContext.Orders.Where(oi => oi.ClientAddressId == clientsAddress.Id))
+            {
+                storeContext.OrdersItems.RemoveRange(storeContext.OrdersItems.Where(oi => oi.OrderId == order.Id));
+            }
+            storeContext.Orders.RemoveRange(storeContext.Orders.Where(o => o.ClientAddressId == clientsAddress.Id));
+            storeContext.ClientsAddresses.Remove(clientsAddress);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<ClientsAddress> Get(long id)
+        public async Task<ClientsAddress> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.ClientsAddresses.FirstOrDefaultAsync(clientAddress => clientAddress.Id == id);
         }
 
-        public Task<IEnumerable<ClientsAddress>> GetAll()
+        public async Task<IEnumerable<ClientsAddress>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.ClientsAddresses.ToListAsync();
         }
 
-        public Task Update(ClientsAddress item)
+        public async Task Update(ClientsAddress clientsAddress)
         {
-            throw new NotImplementedException();
+            storeContext.ClientsAddresses.Update(clientsAddress);
+            await storeContext.SaveChangesAsync();
         }
     }
 }

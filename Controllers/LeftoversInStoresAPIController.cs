@@ -1,17 +1,18 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Store.Data;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     [ApiController]
     public class LeftoversInStoresAPIController : ControllerBase
     {
-        private StoreContext storeContext;
+        private ILeftoversInStoresRepository leftoversInStoresRepository;
 
-        public LeftoversInStoresAPIController(StoreContext context)
+        public LeftoversInStoresAPIController(ILeftoversInStoresRepository leftoversInStoresRepo)
         {
-            storeContext = context;
+            leftoversInStoresRepository = leftoversInStoresRepo;
         }
     }
 }

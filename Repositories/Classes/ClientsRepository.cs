@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
 using Store.Repositories.Interfaces;
 
@@ -8,33 +11,61 @@ namespace Store.Repositories.Classes
 {
     public class ClientsRepository:IClientsRepository
     {
-        public ClientsRepository()
+        private StoreContext storeContext;
+
+        public ClientsRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(Client item)
+        public async Task Create(Client client)
         {
-            throw new NotImplementedException();
+            storeContext.Clients.Add(client);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(Client item)
+        public async Task Delete(Client client)
         {
-            throw new NotImplementedException();
+            List<Cart> cartsToDelete = storeContext.Carts.Where(c => c.ClientId == client.Id).ToList();
+            foreach(Cart cart in cartsToDelete)
+            {
+                storeContext.CartsItems.RemoveRange(storeContext.CartsItems.Where(ci => ci.CartId == cart.Id));
+            }
+            storeContext.Carts.RemoveRange(cartsToDelete);
+
+            List<ClientsAddress> clientsAddressesToDelete = storeContext.ClientsAddresses.Where(c => c.ClientId == client.Id).ToList();
+            foreach(ClientsAddress clientsAddress in clientsAddressesToDelete)
+            {
+                List<Order> orders = storeContext.Orders.Where(o => o.ClientAddressId == clientsAddress.Id).ToList();
+                foreach (Order order in storeContext.Orders.Where(oi => oi.ClientAddressId == clientsAddress.Id))
+                {
+                    storeContext.OrdersItems.RemoveRange(storeContext.OrdersItems.Where(oi => oi.OrderId == order.Id));
+                }
+                storeContext.Orders.RemoveRange(storeContext.Orders.Where(o => o.ClientAddressId == clientsAddress.Id));
+                storeContext.ClientsAddresses.Remove(clientsAddress);
+            }
+
+            storeContext.ClientsEmails.RemoveRange(storeContext.ClientsEmails.Where(ce => ce.ClientId == client.Id));
+            storeContext.ClientsPhonesNumbers.RemoveRange(storeContext.ClientsPhonesNumbers.Where(cpn => cpn.ClientId == client.Id));
+
+            storeContext.Clients.Remove(client);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<Client> Get(long id)
+        public async Task<Client> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.Clients.FirstOrDefaultAsync(client => client.Id == id);
         }
 
-        public Task<IEnumerable<Client>> GetAll()
+        public async Task<IEnumerable<Client>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.Clients.ToListAsync();
         }
 
-        public Task Update(Client item)
+        public async Task Update(Client client)
         {
-            throw new NotImplementedException();
+            storeContext.Clients.Update(client);
+            await storeContext.SaveChangesAsync();
         }
     }
 }

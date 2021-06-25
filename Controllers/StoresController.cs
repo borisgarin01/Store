@@ -5,27 +5,31 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class StoresController : Controller
     {
-        private StoreContext storeContext;
+        private IStoresRepository storesRepository;
+        private IAddressesRepository addressesRepository;
 
-        public StoresController(StoreContext context)
+        public StoresController(IStoresRepository storesRepo,
+            IAddressesRepository addressesRepo)
         {
-            storeContext = context;
+            storesRepository = storesRepo;
+            addressesRepository = addressesRepo;
         }
 
         [Route("Stores")]
         public async Task<IActionResult> GetAllStores()
         {
-            return View(await storeContext.Stores.ToListAsync());
+            return View(await storesRepository.GetAll());
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Addresses =await storeContext.Addresses.ToListAsync();
+            ViewBag.Addresses =await addressesRepository.GetAll();
             return View(new Models.Store());
         }
 
@@ -34,8 +38,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Stores.Add(store);
-                await storeContext.SaveChangesAsync();
+                await storesRepository.Create(store);
                 return RedirectToAction("Index");
             }
             else return View(store);
@@ -43,13 +46,13 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.Stores.FirstAsync(a => a.Id == id));
+            return View(await storesRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            ViewBag.Addresses = await storeContext.Addresses.ToListAsync();
-            return View(await storeContext.Stores.FirstAsync(a => a.Id == id));
+            ViewBag.Addresses = await addressesRepository.GetAll();
+            return View(await storesRepository.Get(id));
         }
 
         [HttpPost]
@@ -57,8 +60,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Stores.Update(store);
-                await storeContext.SaveChangesAsync();
+                await storesRepository.Update(store);
                 return RedirectToAction("GetAllStores");
             }
             else return View(store);
@@ -66,14 +68,13 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.Stores.FirstAsync(a => a.Id == id));
+            return View(await storesRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Models.Store store)
         {
-            storeContext.Stores.Remove(store);
-            await storeContext.SaveChangesAsync();
+            await storesRepository.Delete(store);
             return RedirectToAction("GetAllStores");
         }
     }

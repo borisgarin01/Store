@@ -5,28 +5,35 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class LeftoversInStoresController : Controller
     {
-        private StoreContext storeContext;
+        private ILeftoversInStoresRepository leftoversInStoresRepository;
+        private IProductsRepository productsRepository;
+        private IStoresRepository storesRepository;
 
-        public LeftoversInStoresController(StoreContext context)
+        public LeftoversInStoresController(ILeftoversInStoresRepository leftoversInStoresRepo,
+            IProductsRepository productsRepo,
+            IStoresRepository storesRepo)
         {
-            storeContext = context;
+            leftoversInStoresRepository = leftoversInStoresRepo;
+            productsRepository = productsRepo;
+            storesRepository = storesRepo;
         }
 
         [Route("LeftoversInStores")]
         public async Task<IActionResult> GetAllLeftoversInStores()
         {
-            return View(await storeContext.LeftoversInStores.ToListAsync());
+            return View(await leftoversInStoresRepository.GetAll());
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Products = new SelectList(await storeContext.Products.ToListAsync(), "Id", "ProductName");
-            ViewBag.Stores = new SelectList(await storeContext.Stores.ToListAsync(), "Id", "AddressId");
+            ViewBag.Products = new SelectList(await productsRepository.GetAll(), "Id", "ProductName");
+            ViewBag.Stores = new SelectList(await storesRepository.GetAll(), "Id", "AddressId");
 
             return View(new LeftoversInStore());
         }
@@ -36,8 +43,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.LeftoversInStores.Add(leftoversInStore);
-                await storeContext.SaveChangesAsync();
+                await leftoversInStoresRepository.Create(leftoversInStore);
                 return RedirectToAction("Index");
             }
             else return View(leftoversInStore);
@@ -45,15 +51,15 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.LeftoversInStores.FirstAsync(a => a.Id == id));
+            return View(await leftoversInStoresRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            ViewBag.Products = new SelectList(await storeContext.Products.ToListAsync(), "Id", "ProductName");
-            ViewBag.Stores = new SelectList(await storeContext.Stores.ToListAsync(), "Id", "Id");
+            ViewBag.Products = new SelectList(await productsRepository.GetAll(), "Id", "ProductName");
+            ViewBag.Stores = new SelectList(await storesRepository.GetAll(), "Id", "Id");
 
-            return View(await storeContext.LeftoversInStores.FirstAsync(a => a.Id == id));
+            return View(await leftoversInStoresRepository.Get(id));
         }
 
         [HttpPost]
@@ -61,8 +67,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.LeftoversInStores.Update(leftoversInStore);
-                await storeContext.SaveChangesAsync();
+                await leftoversInStoresRepository.Update(leftoversInStore);
                 return RedirectToAction("GetAllLeftoversInStores");
             }
             else return View(leftoversInStore);
@@ -70,15 +75,14 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.LeftoversInStores.FirstAsync(a => a.Id == id));
+            return View(await leftoversInStoresRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(LeftoversInStore leftoversInStore)
         {
-                storeContext.LeftoversInStores.Remove(leftoversInStore);
-                await storeContext.SaveChangesAsync();
-                return RedirectToAction("GetAllLeftoversInStores");
+            await leftoversInStoresRepository.Delete(leftoversInStore);
+            return RedirectToAction("GetAllLeftoversInStores");
         }
     }
 }

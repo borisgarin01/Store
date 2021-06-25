@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
 using Store.Repositories.Interfaces;
 
@@ -8,33 +10,39 @@ namespace Store.Repositories.Classes
 {
     public class ClientsPhonesNumbersRepository:IClientsPhonesNumbersRepository
     {
-        public ClientsPhonesNumbersRepository()
+        private StoreContext storeContext;
+
+        public ClientsPhonesNumbersRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(ClientsPhonesNumber item)
+        public async Task Create(ClientsPhonesNumber clientsPhonesNumber)
         {
-            throw new NotImplementedException();
+            storeContext.ClientsPhonesNumbers.Add(clientsPhonesNumber);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(ClientsPhonesNumber item)
+        public async Task Delete(ClientsPhonesNumber clientsPhonesNumber)
         {
-            throw new NotImplementedException();
+            storeContext.ClientsPhonesNumbers.Remove(clientsPhonesNumber);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<ClientsPhonesNumber> Get(long id)
+        public async Task<ClientsPhonesNumber> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.ClientsPhonesNumbers.FirstOrDefaultAsync(clientPhoneNumber => clientPhoneNumber.Id == id);
         }
 
-        public Task<IEnumerable<ClientsPhonesNumber>> GetAll()
+        public async Task<IEnumerable<ClientsPhonesNumber>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.ClientsPhonesNumbers.ToListAsync();
         }
 
-        public Task Update(ClientsPhonesNumber item)
+        public async Task Update(ClientsPhonesNumber clientsPhonesNumber)
         {
-            throw new NotImplementedException();
+            storeContext.ClientsPhonesNumbers.Update(clientsPhonesNumber);
+            await storeContext.SaveChangesAsync();
         }
     }
 }

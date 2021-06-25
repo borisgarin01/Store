@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
 using Store.Repositories.Interfaces;
 
@@ -8,33 +11,40 @@ namespace Store.Repositories.Classes
 {
     public class CartsRepository:ICartsRepository
     {
-        public CartsRepository()
+        private StoreContext storeContext;
+
+        public CartsRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(Cart item)
+        public async Task Create(Cart cart)
         {
-            throw new NotImplementedException();
+            storeContext.Carts.Add(cart);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(Cart item)
+        public async Task Delete(Cart cart)
         {
-            throw new NotImplementedException();
+            storeContext.CartsItems.RemoveRange(storeContext.CartsItems.Where(ci => ci.CartId == cart.Id));
+            storeContext.Carts.Remove(cart);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<Cart> Get(long id)
+        public async Task<Cart> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.Carts.FirstOrDefaultAsync(cart => cart.Id == id);
         }
 
-        public Task<IEnumerable<Cart>> GetAll()
+        public async Task<IEnumerable<Cart>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.Carts.ToListAsync();
         }
 
-        public Task Update(Cart item)
+        public async Task Update(Cart cart)
         {
-            throw new NotImplementedException();
+            storeContext.Carts.Update(cart);
+            await storeContext.SaveChangesAsync();
         }
     }
 }

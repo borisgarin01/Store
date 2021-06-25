@@ -5,27 +5,31 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class OrdersController : Controller
     {
-        private StoreContext storeContext;
+        private IOrdersRepository ordersRepository;
+        private IClientsAddressesRepository clientsAddressesRepository;
 
-        public OrdersController(StoreContext context)
+        public OrdersController(IOrdersRepository ordersRepo,
+            IClientsAddressesRepository clientsAddressesRepo)
         {
-            storeContext = context;
+            ordersRepository = ordersRepo;
+            clientsAddressesRepository = clientsAddressesRepo;
         }
 
         [Route("Orders")]
         public async Task<IActionResult> GetAllOrders()
         {
-            return View(await storeContext.Orders.ToListAsync());
+            return View(await ordersRepository.GetAll());
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.ClientsAddresses = new SelectList(await storeContext.ClientsAddresses.ToListAsync(), "Id", "Id");
+            ViewBag.ClientsAddresses = new SelectList(await clientsAddressesRepository.GetAll(), "Id", "Id");
             return View(new Order());
         }
 
@@ -34,8 +38,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Orders.Add(order);
-                await storeContext.SaveChangesAsync();
+                await ordersRepository.Create(order);
                 return RedirectToAction("Index");
             }
             else return View(order);
@@ -43,13 +46,13 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.Orders.FirstAsync(a => a.Id == id));
+            return View(await ordersRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            ViewBag.ClientsAddresses = new SelectList(await storeContext.ClientsAddresses.ToListAsync(), "Id", "Id");
-            return View(await storeContext.Orders.FirstAsync(a => a.Id == id));
+            ViewBag.ClientsAddresses = new SelectList(await clientsAddressesRepository.GetAll(), "Id", "Id");
+            return View(await ordersRepository.Get(id));
         }
 
         [HttpPost]
@@ -57,8 +60,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Orders.Update(order);
-                await storeContext.SaveChangesAsync();
+                await ordersRepository.Update(order);
                 return RedirectToAction("GetAllOrders");
             }
             else return View(order);
@@ -66,15 +68,14 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.Orders.FirstAsync(a => a.Id == id));
+            return View(await ordersRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Order order)
         {
-                storeContext.Orders.Remove(order);
-                await storeContext.SaveChangesAsync();
-                return RedirectToAction("GetAllOrders");
+            await ordersRepository.Delete(order);
+            return RedirectToAction("GetAllOrders");
         }
     }
 }

@@ -5,22 +5,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class CategoriesController : Controller
     {
-        private StoreContext storeContext;
+        private ICategoriesRepository categoriesRepository;
 
-        public CategoriesController(StoreContext context)
+        public CategoriesController(ICategoriesRepository categoriesRepo)
         {
-            storeContext = context;
+            categoriesRepository = categoriesRepo;
         }
 
         [Route("Categories")]
         public async Task<IActionResult> GetAllCategories()
         {
-            return View(await storeContext.Categories.ToListAsync());
+            return View(await categoriesRepository.GetAll());
         }
 
         public IActionResult Create()
@@ -33,8 +34,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Categories.Add(category);
-                await storeContext.SaveChangesAsync();
+                await categoriesRepository.Create(category);
                 return RedirectToAction("Index");
             }
             else return View(category);
@@ -42,12 +42,12 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.Categories.FirstAsync(a => a.Id == id));
+            return View(await categoriesRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            return View(await storeContext.Categories.FirstAsync(a => a.Id == id));
+            return View(await categoriesRepository.Get(id));
         }
 
         [HttpPost]
@@ -55,8 +55,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Categories.Update(category);
-                await storeContext.SaveChangesAsync();
+                await categoriesRepository.Update(category);
                 return RedirectToAction("GetAllCategories");
             }
             else return View(category);
@@ -64,15 +63,13 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.Categories.FirstAsync(a => a.Id == id));
+            return View(await categoriesRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Category category)
         {
-            storeContext.Products.RemoveRange(storeContext.Products.Where(p => p.CategoryId == category.Id));
-            storeContext.Categories.Remove(category);
-            await storeContext.SaveChangesAsync();
+            await categoriesRepository.Delete(category);
             return RedirectToAction("GetAllCategories");
         }
     }

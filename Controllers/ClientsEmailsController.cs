@@ -4,27 +4,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class ClientsEmailsController : Controller
     {
-        private StoreContext storeContext;
+        private IClientsEmailsRepository clientsEmailsRepository;
+        private IClientsRepository clientsRepository;
 
-        public ClientsEmailsController(StoreContext context)
+        public ClientsEmailsController(IClientsEmailsRepository clientsEmailsRepo,
+            IClientsRepository clientsRepo)
         {
-            storeContext = context;
+            clientsEmailsRepository = clientsEmailsRepo;
+            clientsRepository = clientsRepo;
         }
 
         [Route("ClientsEmails")]
         public async Task<IActionResult> GetAllClientsEmails()
         {
-            return View(await storeContext.ClientsEmails.ToListAsync());
+            return View(await clientsEmailsRepository.GetAll());
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Clients = await storeContext.Clients.ToListAsync();
+            ViewBag.Clients = await clientsRepository.GetAll();
             return View(new ClientsEmail());
         }
 
@@ -33,8 +37,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.ClientsEmails.Add(clientsEmail);
-                await storeContext.SaveChangesAsync();
+                await clientsEmailsRepository.Create(clientsEmail);
                 return RedirectToAction("Index");
             }
             else return View(clientsEmail);
@@ -42,13 +45,13 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.ClientsEmails.FirstAsync(a => a.Id == id));
+            return View(await clientsEmailsRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            ViewBag.Clients = await storeContext.Clients.ToListAsync();
-            return View(await storeContext.ClientsEmails.FirstAsync(a => a.Id == id));
+            ViewBag.Clients = await clientsRepository.GetAll();
+            return View(await clientsEmailsRepository.Get(id));
         }
 
         [HttpPost]
@@ -56,8 +59,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.ClientsEmails.Update(clientsEmail);
-                await storeContext.SaveChangesAsync();
+                await clientsEmailsRepository.Update(clientsEmail);
                 return RedirectToAction("GetAllClientsEmails");
             }
             else return View(clientsEmail);
@@ -65,15 +67,14 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.ClientsEmails.FirstAsync(a => a.Id == id));
+            return View(await clientsEmailsRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(ClientsEmail clientsEmail)
         {
-                storeContext.ClientsEmails.Remove(clientsEmail);
-                await storeContext.SaveChangesAsync();
-                return RedirectToAction("GetAllClientsEmails");
+            await clientsEmailsRepository.Delete(clientsEmail);
+            return RedirectToAction("GetAllClientsEmails");
         }
     }
 }

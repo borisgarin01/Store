@@ -1,17 +1,20 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Store.Data;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     [ApiController]
     public class AddressesAPIController:ControllerBase
     {
-        private StoreContext storeContext;
+        private IAddressesRepository addressesRepository;
 
-        public AddressesAPIController(StoreContext context)
+        public AddressesAPIController(IAddressesRepository addressesRepo)
         {
-            storeContext = context;
+            addressesRepository = addressesRepo;
         }
+
+
     }
 }

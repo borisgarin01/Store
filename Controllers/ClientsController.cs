@@ -4,22 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class ClientsController : Controller
     {
-        private StoreContext storeContext;
+        private IClientsRepository clientsRepository;
 
-        public ClientsController(StoreContext context)
+        public ClientsController(IClientsRepository clientsRepo)
         {
-            storeContext = context;
+            clientsRepository = clientsRepo;
         }
 
         [Route("Clients")]
         public async Task<IActionResult> GetAllClients()
         {
-            return View(await storeContext.Clients.ToListAsync());
+            return View(await clientsRepository.GetAll());
         }
 
         public IActionResult Create()
@@ -32,8 +33,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Clients.Add(client);
-                await storeContext.SaveChangesAsync();
+                await clientsRepository.Create(client);
                 return RedirectToAction("Index");
             }
             else return View(client);
@@ -41,12 +41,12 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.Clients.FirstAsync(a => a.Id == id));
+            return View(await clientsRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            return View(await storeContext.Clients.FirstAsync(a => a.Id == id));
+            return View(await clientsRepository.Get(id));
         }
 
         [HttpPost]
@@ -54,8 +54,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Clients.Update(client);
-                await storeContext.SaveChangesAsync();
+                await clientsRepository.Update(client);
                 return RedirectToAction("GetAllClients");
             }
             else return View(client);
@@ -63,15 +62,14 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.Clients.FirstAsync(a => a.Id == id));
+            return View(await clientsRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Client client)
         {
-                storeContext.Clients.Remove(client);
-                await storeContext.SaveChangesAsync();
-                return RedirectToAction("GetAllClients");
+            await clientsRepository.Delete(client);
+            return RedirectToAction("GetAllClients");
         }
     }
 }

@@ -1,17 +1,18 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Store.Data;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     [ApiController]
     public class ClientsEmailsAPIController : ControllerBase
     {
-        private StoreContext storeContext;
+        private IClientsEmailsRepository clientsEmailsRepository;
 
-        public ClientsEmailsAPIController(StoreContext context)
+        public ClientsEmailsAPIController(IClientsEmailsRepository clientsEmailsRepo)
         {
-            storeContext = context;
+            clientsEmailsRepository = clientsEmailsRepo;
         }
     }
 }

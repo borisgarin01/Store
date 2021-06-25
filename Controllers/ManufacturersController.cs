@@ -4,22 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class ManufacturersController : Controller
     {
-        private StoreContext storeContext;
+        private IManufacturersRepository manufacturersRepository;
 
-        public ManufacturersController(StoreContext context)
+        public ManufacturersController(IManufacturersRepository manufacturersRepo)
         {
-            storeContext = context;
+            manufacturersRepository = manufacturersRepo;
         }
 
         [Route("Manufacturers")]
         public async Task<IActionResult> GetAllManufacturers()
         {
-            return View(await storeContext.Manufacturers.ToListAsync());
+            return View(await manufacturersRepository.GetAll());
         }
 
         public IActionResult Create()
@@ -32,8 +33,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Manufacturers.Add(manufacturer);
-                await storeContext.SaveChangesAsync();
+                await manufacturersRepository.Create(manufacturer);
                 return RedirectToAction("Index");
             }
             else return View(manufacturer);
@@ -41,12 +41,12 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.Manufacturers.FirstAsync(a => a.Id == id));
+            return View(await manufacturersRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            return View(await storeContext.Manufacturers.FirstAsync(a => a.Id == id));
+            return View(await manufacturersRepository.Get(id));
         }
 
         [HttpPost]
@@ -54,8 +54,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Manufacturers.Update(manufacturer);
-                await storeContext.SaveChangesAsync();
+                await manufacturersRepository.Update(manufacturer);
                 return RedirectToAction("GetAllManufacturers");
             }
             else return View(manufacturer);
@@ -63,15 +62,14 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.Manufacturers.FirstAsync(a => a.Id == id));
+            return View(await manufacturersRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Manufacturer manufacturer)
         {
-                storeContext.Manufacturers.Remove(manufacturer);
-                await storeContext.SaveChangesAsync();
-                return RedirectToAction("GetAllManufacturers");
+            await manufacturersRepository.Delete(manufacturer);
+            return RedirectToAction("GetAllManufacturers");
         }
     }
 }

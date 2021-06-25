@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
 using Store.Repositories.Interfaces;
 
@@ -8,33 +11,50 @@ namespace Store.Repositories.Classes
 {
     public class ManufacturersRepository:IManufacturersRepository
     {
-        public ManufacturersRepository()
+        private StoreContext storeContext;
+
+        public ManufacturersRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(Manufacturer item)
+        public async Task Create(Manufacturer manufacturer)
         {
-            throw new NotImplementedException();
+            storeContext.Manufacturers.Add(manufacturer);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(Manufacturer item)
+        public async Task Delete(Manufacturer manufacturer)
         {
-            throw new NotImplementedException();
+            storeContext.Manufacturers.Remove(manufacturer);
+
+            foreach (var product in storeContext.Products.Where(p => p.ManufacturerId == manufacturer.Id))
+            {
+                storeContext.CartsItems.RemoveRange(storeContext.CartsItems.Where(ci => ci.ProductId == product.Id));
+                storeContext.CommonProductsLeftoversOnPrimaryWarehouses.RemoveRange(storeContext.CommonProductsLeftoversOnPrimaryWarehouses.Where(cplopw => cplopw.ProductId == product.Id));
+                storeContext.LeftoversInStores.RemoveRange(storeContext.LeftoversInStores.Where(lis => lis.ProductId == product.Id));
+                storeContext.OrdersItems.RemoveRange(storeContext.OrdersItems.Where(oi => oi.ProductId == product.Id));
+
+                storeContext.Products.Remove(product);
+            }
+
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<Manufacturer> Get(long id)
+        public async Task<Manufacturer> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.Manufacturers.FirstOrDefaultAsync(manufacturer => manufacturer.Id == id);
         }
 
-        public Task<IEnumerable<Manufacturer>> GetAll()
+        public async Task<IEnumerable<Manufacturer>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.Manufacturers.ToListAsync();
         }
 
-        public Task Update(Manufacturer item)
+        public async Task Update(Manufacturer manufacturer)
         {
-            throw new NotImplementedException();
+            storeContext.Manufacturers.Update(manufacturer);
+            await storeContext.SaveChangesAsync();
         }
     }
 }

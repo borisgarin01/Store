@@ -4,27 +4,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class ClientsPhonesNumbersController : Controller
     {
-        private StoreContext storeContext;
+        private IClientsPhonesNumbersRepository clientsPhonesNumbersRepository;
+        private IClientsRepository clientsRepository;
 
-        public ClientsPhonesNumbersController(StoreContext context)
+        public ClientsPhonesNumbersController(IClientsPhonesNumbersRepository clientsPhonesNumbersRepo,
+            IClientsRepository clientsRepo)
         {
-            storeContext = context;
+            clientsPhonesNumbersRepository = clientsPhonesNumbersRepo;
+            clientsRepository = clientsRepo;
         }
 
         [Route("ClientsPhonesNumbers")]
         public async Task<IActionResult> GetAllClientsPhonesNumbers()
         {
-            return View(await storeContext.ClientsPhonesNumbers.ToListAsync());
+            return View(await clientsPhonesNumbersRepository.GetAll());
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Clients = await storeContext.Clients.ToListAsync();
+            ViewBag.Clients = await clientsRepository.GetAll();
             return View(new ClientsPhonesNumber());
         }
 
@@ -33,8 +37,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.ClientsPhonesNumbers.Add(clientsPhonesNumber);
-                await storeContext.SaveChangesAsync();
+                await clientsPhonesNumbersRepository.Create(clientsPhonesNumber);
                 return RedirectToAction("Index");
             }
             else return View(clientsPhonesNumber);
@@ -42,13 +45,13 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.ClientsPhonesNumbers.FirstAsync(a => a.Id == id));
+            return View(await clientsPhonesNumbersRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            ViewBag.Clients = await storeContext.Clients.ToListAsync();
-            return View(await storeContext.ClientsPhonesNumbers.FirstAsync(a => a.Id == id));
+            ViewBag.Clients = await clientsRepository.GetAll();
+            return View(await clientsPhonesNumbersRepository.Get(id));
         }
 
         [HttpPost]
@@ -56,8 +59,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.ClientsPhonesNumbers.Update(clientsPhonesNumber);
-                await storeContext.SaveChangesAsync();
+                await clientsPhonesNumbersRepository.Update(clientsPhonesNumber);
                 return RedirectToAction("GetAllClientsPhonesNumbers");
             }
             else return View(clientsPhonesNumber);
@@ -65,15 +67,14 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.ClientsPhonesNumbers.FirstAsync(a => a.Id == id));
+            return View(await clientsPhonesNumbersRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(ClientsPhonesNumber clientsPhonesNumber)
         {
-                storeContext.ClientsPhonesNumbers.Remove(clientsPhonesNumber);
-                await storeContext.SaveChangesAsync();
-                return RedirectToAction("GetAllClientsPhonesNumbers");
+            await clientsPhonesNumbersRepository.Delete(clientsPhonesNumber);
+            return RedirectToAction("GetAllClientsPhonesNumbers");
         }
     }
 }

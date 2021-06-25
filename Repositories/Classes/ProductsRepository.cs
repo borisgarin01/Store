@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
 using Store.Repositories.Interfaces;
 
@@ -8,33 +11,44 @@ namespace Store.Repositories.Classes
 {
     public class ProductsRepository:IProductsRepository
     {
-        public ProductsRepository()
+        private StoreContext storeContext;
+
+        public ProductsRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(Product item)
+        public async Task Create(Product product)
         {
-            throw new NotImplementedException();
+            storeContext.Products.Add(product);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(Product item)
+        public async Task Delete(Product product)
         {
-            throw new NotImplementedException();
+            storeContext.CartsItems.RemoveRange(storeContext.CartsItems.Where(ci => ci.ProductId == product.Id));
+            storeContext.CommonProductsLeftoversOnPrimaryWarehouses.RemoveRange(storeContext.CommonProductsLeftoversOnPrimaryWarehouses.Where(cplopw => cplopw.ProductId == product.Id));
+            storeContext.LeftoversInStores.RemoveRange(storeContext.LeftoversInStores.Where(lis => lis.ProductId == product.Id));
+            storeContext.OrdersItems.RemoveRange(storeContext.OrdersItems.Where(oi => oi.ProductId == product.Id));
+
+            storeContext.Products.Remove(product);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<Product> Get(long id)
+        public async Task<Product> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.Products.FirstOrDefaultAsync(product => product.Id == id);
         }
 
-        public Task<IEnumerable<Product>> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.Products.ToListAsync();
         }
 
-        public Task Update(Product item)
+        public async Task Update(Product product)
         {
-            throw new NotImplementedException();
+            storeContext.Products.Update(product);
+            await storeContext.SaveChangesAsync();
         }
     }
 }

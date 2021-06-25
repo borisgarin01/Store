@@ -6,29 +6,40 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class ProductsController : Controller
     {
-        private StoreContext storeContext;
+        private IProductsRepository productsRepository;
 
-        public ProductsController(StoreContext context)
+        private ICategoriesRepository categoriesRepository;
+        private IManufacturersRepository manufacturersRepository;
+        private IProductsKindsRepository productsKindsRepository;
+
+        public ProductsController(IProductsRepository productsRepo,
+            ICategoriesRepository categoriesRepo,
+            IManufacturersRepository manufacturersRepo,
+            IProductsKindsRepository productsKindsRepo)
         {
-            storeContext = context;
+            productsRepository = productsRepo;
+            categoriesRepository = categoriesRepo;
+            manufacturersRepository = manufacturersRepo;
+            productsKindsRepository = productsKindsRepo;
         }
 
         [Route("Products")]
         public async Task<IActionResult> GetAllProducts()
         {
-            return View(await storeContext.Products.ToListAsync());
+            return View(await productsRepository.GetAll());
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = new SelectList(await storeContext.Categories.ToListAsync(), "Id", "CategoryName");
-            ViewBag.Manufacturers = new SelectList(await storeContext.Manufacturers.ToListAsync(), "Id", "ManufacturerName");
-            ViewBag.ProductsKinds = new SelectList(await storeContext.ProductsKinds.ToListAsync(), "Id", "KindName");
+            ViewBag.Categories = new SelectList(await categoriesRepository.GetAll(), "Id", "CategoryName");
+            ViewBag.Manufacturers = new SelectList(await manufacturersRepository.GetAll(), "Id", "ManufacturerName");
+            ViewBag.ProductsKinds = new SelectList(await productsKindsRepository.GetAll(), "Id", "KindName");
             return View(new Product());
         }
 
@@ -37,8 +48,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Products.Add(product);
-                await storeContext.SaveChangesAsync();
+                await productsRepository.Create(product);
                 return RedirectToAction("GetAllProducts");
             }
             else return View(product);
@@ -46,15 +56,15 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.Products.FirstAsync(a => a.Id == id));
+            return View(await productsRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            ViewBag.Categories = new SelectList(await storeContext.Categories.ToListAsync(), "Id", "CategoryName");
-            ViewBag.Manufacturers = new SelectList(await storeContext.Manufacturers.ToListAsync(), "Id", "ManufacturerName");
-            ViewBag.ProductsKinds = new SelectList(await storeContext.ProductsKinds.ToListAsync(), "Id", "KindName");
-            return View(await storeContext.Products.FirstAsync(a => a.Id == id));
+            ViewBag.Categories = new SelectList(await categoriesRepository.GetAll(), "Id", "CategoryName");
+            ViewBag.Manufacturers = new SelectList(await manufacturersRepository.GetAll(), "Id", "ManufacturerName");
+            ViewBag.ProductsKinds = new SelectList(await productsKindsRepository.GetAll(), "Id", "KindName");
+            return View(await productsRepository.GetAll());
         }
 
         [HttpPost]
@@ -62,8 +72,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.Products.Update(product);
-                await storeContext.SaveChangesAsync();
+                await productsRepository.Create(product);
                 return RedirectToAction("GetAllProducts");
             }
             else return View(product);
@@ -71,19 +80,13 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.Products.FirstAsync(a => a.Id == id));
+            return View(await productsRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Product product)
         {
-            storeContext.CartsItems.RemoveRange(storeContext.CartsItems.Where(ci => ci.ProductId == product.Id));
-            storeContext.CommonProductsLeftoversOnPrimaryWarehouses.RemoveRange(storeContext.CommonProductsLeftoversOnPrimaryWarehouses.Where(ci => ci.ProductId == product.Id));
-            storeContext.LeftoversInStores.RemoveRange(storeContext.LeftoversInStores.Where(ci => ci.ProductId == product.Id));
-            storeContext.OrdersItems.RemoveRange(storeContext.OrdersItems.Where(ci => ci.ProductId == product.Id));
-
-            storeContext.Products.Remove(product);
-            await storeContext.SaveChangesAsync();
+            await productsRepository.Delete(product);
             return RedirectToAction("GetAllProducts");
         }
     }

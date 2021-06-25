@@ -5,27 +5,31 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class CommonProductsLeftoversOnPrimaryWarehousesController : Controller
     {
-        private StoreContext storeContext;
+        private ICommonProductsLeftoversOnPrimaryWarehouseRepository commonProductsLeftoversOnPrimaryWarehouseRepository;
+        private IProductsRepository productsRepository;
 
-        public CommonProductsLeftoversOnPrimaryWarehousesController(StoreContext context)
+        public CommonProductsLeftoversOnPrimaryWarehousesController(ICommonProductsLeftoversOnPrimaryWarehouseRepository commonProductsLeftoversOnPrimaryWarehouseRepo,
+            IProductsRepository productsRepo)
         {
-            storeContext = context;
+            commonProductsLeftoversOnPrimaryWarehouseRepository = commonProductsLeftoversOnPrimaryWarehouseRepo;
+            productsRepository = productsRepo;
         }
 
         [Route("CommonProductsLeftoversOnPrimaryWarehouses")]
         public async Task<IActionResult> GetAllCommonProductsLeftoversOnPrimaryWarehouses()
         {
-            return View(await storeContext.CommonProductsLeftoversOnPrimaryWarehouses.ToListAsync());
+            return View(await commonProductsLeftoversOnPrimaryWarehouseRepository.GetAll());
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Products = new SelectList(await storeContext.Products.ToListAsync(), "Id", "ProductName");
+            ViewBag.Products = new SelectList(await productsRepository.GetAll(), "Id", "ProductName");
             return View(new CommonProductsLeftoversOnPrimaryWarehouse());
         }
 
@@ -34,8 +38,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.CommonProductsLeftoversOnPrimaryWarehouses.Add(commonProductsLeftoversOnPrimaryWarehouse);
-                await storeContext.SaveChangesAsync();
+                await commonProductsLeftoversOnPrimaryWarehouseRepository.Create(commonProductsLeftoversOnPrimaryWarehouse);
                 return RedirectToAction("Index");
             }
             else return View(commonProductsLeftoversOnPrimaryWarehouse);
@@ -43,13 +46,13 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.CommonProductsLeftoversOnPrimaryWarehouses.FirstAsync(a => a.Id == id));
+            return View(await commonProductsLeftoversOnPrimaryWarehouseRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            ViewBag.Products = new SelectList(await storeContext.Products.ToListAsync(), "Id", "ProductName");
-            return View(await storeContext.CommonProductsLeftoversOnPrimaryWarehouses.FirstAsync(a => a.Id == id));
+            ViewBag.Products = new SelectList(await productsRepository.GetAll(), "Id", "ProductName");
+            return View(await commonProductsLeftoversOnPrimaryWarehouseRepository.Get(id));
         }
 
         [HttpPost]
@@ -57,8 +60,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.CommonProductsLeftoversOnPrimaryWarehouses.Update(commonProductsLeftoversOnPrimaryWarehouse);
-                await storeContext.SaveChangesAsync();
+                await commonProductsLeftoversOnPrimaryWarehouseRepository.Update(commonProductsLeftoversOnPrimaryWarehouse);
                 return RedirectToAction("GetAllCommonProductsLeftoversOnPrimaryWarehouses");
             }
             else return View(commonProductsLeftoversOnPrimaryWarehouse);
@@ -66,15 +68,14 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.CommonProductsLeftoversOnPrimaryWarehouses.FirstAsync(a => a.Id == id));
+            return View(await commonProductsLeftoversOnPrimaryWarehouseRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(CommonProductsLeftoversOnPrimaryWarehouse commonProductsLeftoversOnPrimaryWarehouse)
         {
-                storeContext.CommonProductsLeftoversOnPrimaryWarehouses.Remove(commonProductsLeftoversOnPrimaryWarehouse);
-                await storeContext.SaveChangesAsync();
-                return RedirectToAction("GetAllCommonProductsLeftoversOnPrimaryWarehouses");
+            await commonProductsLeftoversOnPrimaryWarehouseRepository.Delete(commonProductsLeftoversOnPrimaryWarehouse);
+            return RedirectToAction("GetAllCommonProductsLeftoversOnPrimaryWarehouses");
         }
     }
 }

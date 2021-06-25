@@ -1,39 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Repositories.Interfaces;
 
 namespace Store.Repositories.Classes
 {
     public class StoresRepository:IStoresRepository
     {
-        public StoresRepository()
+        private StoreContext storeContext;
+
+        public StoresRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(Models.Store item)
+        public async Task Create(Models.Store store)
         {
-            throw new NotImplementedException();
+            storeContext.Stores.Add(store);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(Models.Store item)
+        public async Task Delete(Models.Store store)
         {
-            throw new NotImplementedException();
+            storeContext.LeftoversInStores.RemoveRange(storeContext.LeftoversInStores.Where(lis => lis.StoreId == store.Id));
+            storeContext.Stores.Remove(store);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<Models.Store> Get(long id)
+        public async Task<Models.Store> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.Stores.FirstOrDefaultAsync(store => store.Id == id);
         }
 
-        public Task<IEnumerable<Models.Store>> GetAll()
+        public async Task<IEnumerable<Models.Store>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.Stores.ToListAsync();
         }
 
-        public Task Update(Models.Store item)
+        public async Task Update(Models.Store store)
         {
-            throw new NotImplementedException();
+            storeContext.Stores.Update(store);
+            await storeContext.SaveChangesAsync();
         }
     }
 }

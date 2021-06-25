@@ -5,28 +5,35 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using Store.Models;
+using Store.Repositories.Interfaces;
 
 namespace Store.Controllers
 {
     public class OrdersItemsController : Controller
     {
-        private StoreContext storeContext;
+        private IOrdersItemsRepository ordersItemsRepository;
+        private IOrdersRepository ordersRepository;
+        private IProductsRepository productsRepository;
 
-        public OrdersItemsController(StoreContext context)
+        public OrdersItemsController(IOrdersItemsRepository ordersItemsRepo,
+            IOrdersRepository ordersRepo,
+            IProductsRepository productsRepo)
         {
-            storeContext = context;
+            ordersItemsRepository = ordersItemsRepo;
+            ordersRepository = ordersRepo;
+            productsRepository = productsRepo;
         }
 
         [Route("OrdersItems")]
         public async Task<IActionResult> GetAllOrdersItems()
         {
-            return View(await storeContext.OrdersItems.ToListAsync());
+            return View(await ordersItemsRepository.GetAll());
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Orders = new SelectList(await storeContext.Orders.ToListAsync(), "Id", "OrderingDate");
-            ViewBag.Products = new SelectList(await storeContext.Products.ToListAsync(), "Id", "ProductName");
+            ViewBag.Orders = new SelectList(await ordersRepository.GetAll(), "Id", "OrderingDate");
+            ViewBag.Products = new SelectList(await productsRepository.GetAll(), "Id", "ProductName");
 
             return View(new OrdersItem());
         }
@@ -36,8 +43,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.OrdersItems.Add(ordersItem);
-                await storeContext.SaveChangesAsync();
+                await ordersItemsRepository.Create(ordersItem);
                 return RedirectToAction("Index");
             }
             else return View(ordersItem);
@@ -45,15 +51,15 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Get(long id)
         {
-            return View(await storeContext.OrdersItems.FirstAsync(a => a.Id == id));
+            return View(await ordersItemsRepository.Get(id));
         }
 
         public async Task<IActionResult> Edit(long id)
         {
-            ViewBag.Orders = new SelectList(await storeContext.Orders.ToListAsync(), "Id", "OrderingDate");
-            ViewBag.Products = new SelectList(await storeContext.Products.ToListAsync(), "Id", "ProductName");
+            ViewBag.Orders = new SelectList(await ordersRepository.GetAll(), "Id", "OrderingDate");
+            ViewBag.Products = new SelectList(await productsRepository.GetAll(), "Id", "ProductName");
 
-            return View(await storeContext.OrdersItems.FirstAsync(a => a.Id == id));
+            return View(await ordersRepository.Get(id));
         }
 
         [HttpPost]
@@ -61,8 +67,7 @@ namespace Store.Controllers
         {
             if (ModelState.IsValid)
             {
-                storeContext.OrdersItems.Update(ordersItem);
-                await storeContext.SaveChangesAsync();
+                await ordersItemsRepository.Update(ordersItem);
                 return RedirectToAction("GetAllOrdersItems");
             }
             else return View(ordersItem);
@@ -70,15 +75,14 @@ namespace Store.Controllers
 
         public async Task<IActionResult> Delete(long id)
         {
-            return View(await storeContext.OrdersItems.FirstAsync(a => a.Id == id));
+            return View(await ordersItemsRepository.Get(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(OrdersItem ordersItem)
         {
-                storeContext.OrdersItems.Remove(ordersItem);
-                await storeContext.SaveChangesAsync();
-                return RedirectToAction("GetAllOrdersItems");
+            await ordersItemsRepository.Delete(ordersItem);
+            return RedirectToAction("GetAllOrdersItems");
         }
     }
 }

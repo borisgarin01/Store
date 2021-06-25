@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
 using Store.Repositories.Interfaces;
 
@@ -8,33 +10,39 @@ namespace Store.Repositories.Classes
 {
     public class LeftoversInStoresRepository:ILeftoversInStoresRepository
     {
-        public LeftoversInStoresRepository()
+        private StoreContext storeContext;
+
+        public LeftoversInStoresRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(LeftoversInStore item)
+        public async Task Create(LeftoversInStore leftoversInStore)
         {
-            throw new NotImplementedException();
+            storeContext.LeftoversInStores.Add(leftoversInStore);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(LeftoversInStore item)
+        public async Task Delete(LeftoversInStore leftoversInStore)
         {
-            throw new NotImplementedException();
+            storeContext.LeftoversInStores.Remove(leftoversInStore);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<LeftoversInStore> Get(long id)
+        public async Task<LeftoversInStore> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.LeftoversInStores.FirstOrDefaultAsync(leftoversInStore => leftoversInStore.Id == id);
         }
 
-        public Task<IEnumerable<LeftoversInStore>> GetAll()
+        public async Task<IEnumerable<LeftoversInStore>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.LeftoversInStores.ToListAsync();
         }
 
-        public Task Update(LeftoversInStore item)
+        public async Task Update(LeftoversInStore leftoversInStore)
         {
-            throw new NotImplementedException();
+            storeContext.LeftoversInStores.Update(leftoversInStore);
+            await storeContext.SaveChangesAsync();
         }
     }
 }

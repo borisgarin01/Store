@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 using Store.Models;
 using Store.Repositories.Interfaces;
 
@@ -8,33 +10,39 @@ namespace Store.Repositories.Classes
 {
     public class OrdersItemsRepository:IOrdersItemsRepository
     {
-        public OrdersItemsRepository()
+        private StoreContext storeContext;
+
+        public OrdersItemsRepository(StoreContext context)
         {
+            storeContext = context;
         }
 
-        public Task Create(OrdersItem item)
+        public async Task Create(OrdersItem orderItem)
         {
-            throw new NotImplementedException();
+            storeContext.OrdersItems.Add(orderItem);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task Delete(OrdersItem item)
+        public async Task Delete(OrdersItem orderItem)
         {
-            throw new NotImplementedException();
+            storeContext.OrdersItems.Remove(orderItem);
+            await storeContext.SaveChangesAsync();
         }
 
-        public Task<OrdersItem> Get(long id)
+        public async Task<OrdersItem> Get(long id)
         {
-            throw new NotImplementedException();
+            return await storeContext.OrdersItems.FirstOrDefaultAsync(orderItem => orderItem.Id == id);
         }
 
-        public Task<IEnumerable<OrdersItem>> GetAll()
+        public async Task<IEnumerable<OrdersItem>> GetAll()
         {
-            throw new NotImplementedException();
+            return await storeContext.OrdersItems.ToListAsync();
         }
 
-        public Task Update(OrdersItem item)
+        public async Task Update(OrdersItem orderItem)
         {
-            throw new NotImplementedException();
+            storeContext.OrdersItems.Update(orderItem);
+            await storeContext.SaveChangesAsync();
         }
     }
 }
