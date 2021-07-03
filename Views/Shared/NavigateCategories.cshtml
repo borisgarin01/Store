@@ -1,0 +1,7 @@
+﻿@model List<Category>
+<nav>
+    @foreach(Category category in Model)
+            {
+                <a asp-controller="Buy" asp-action="GetProductsByCategory" asp-route-id="@category.Id">@category.CategoryName</a>
+            }
+</nav>

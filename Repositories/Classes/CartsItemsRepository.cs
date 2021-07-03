@@ -17,6 +17,12 @@ namespace Store.Repositories.Classes
             storeContext = context;
         }
 
+        public async Task AddCartItemQuantity(CartsItem cartsItem)
+        {
+            storeContext.CartsItems.Find(cartsItem.Id).Quantity++;
+            await storeContext.SaveChangesAsync();
+        }
+
         public async Task Create(CartsItem cartsItem)
         {
             storeContext.CartsItems.Add(cartsItem);

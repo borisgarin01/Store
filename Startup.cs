@@ -68,8 +68,6 @@ namespace Store
                 endpoints.MapControllerRoute("default", "{controller=Products}/{action=Index}/{id?}");
             });
 
-            
-
             app.UseMvcWithDefaultRoute();
         }
     }
