@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace DataAccess.Migrations;
+namespace Migrations.Migrations;
 
 [Migration(2, "CreateCategoriesTableAndAlterProductsTableViaCategoriesIdForeignKeyMigration_07_04_2024_14_49")]
 

@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace DataAccess.Migrations;
+namespace Migrations.Migrations;
 
 [Migration(1, "CreateProductsTableMigration_07_04_2024_14_45")]
 public sealed class CreateProductsTableMigration : Migration
