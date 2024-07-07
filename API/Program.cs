@@ -1,5 +1,7 @@
 using FluentMigrator.Runner;
+using Microsoft.AspNetCore.Identity;
 using Migrations.Migrations;
+using Models;
 using Repositories.Concrete;
 using Repositories.Interfaces.Derived;
 
@@ -47,6 +49,8 @@ internal class Program
             // Execute the migrations
             runner.MigrateUp();
         }
+
+        builder.Services.AddIdentity<User, IdentityRole>().AddUserStore<User>().AddDefaultTokenProviders();
 
         builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>(options => new CategoriesRepository(connectionString));
 
