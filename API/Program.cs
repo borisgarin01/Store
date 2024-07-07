@@ -1,5 +1,7 @@
-using DataAccess.Migrations;
 using FluentMigrator.Runner;
+using Migrations.Migrations;
+using Repositories.Concrete;
+using Repositories.Interfaces.Derived;
 
 namespace API;
 
@@ -9,9 +11,11 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllersWithViews();
+        builder.Services.AddMvc(options => options.EnableEndpointRouting = false);
 
         builder.Services.AddSwaggerGen();
+
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
         var serviceProvider = new ServiceCollection()
      // Logging is the replacement for the old IAnnouncer
@@ -28,7 +32,7 @@ internal class Program
                  opt.ProviderSwitches = "Force Quote=false";
              })
              // The SQLite connection string
-             .WithGlobalConnectionString(options => builder.Configuration.GetConnectionString("DefaultConnection"))
+             .WithGlobalConnectionString(options => connectionString)
              // Specify the assembly with the migrations
              .WithMigrationsIn(typeof(CreateProductsTableMigration).Assembly))
      .BuildServiceProvider();
@@ -43,6 +47,12 @@ internal class Program
             // Execute the migrations
             runner.MigrateUp();
         }
+
+        builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>(options => new CategoriesRepository(connectionString));
+
+        builder.Services.AddScoped<IManufacturersRepository, ManufacturersRepository>(options => new ManufacturersRepository(connectionString));
+
+        builder.Services.AddScoped<IProductsRepository, ProductsRepository>(options => new ProductsRepository(connectionString));
 
         var app = builder.Build();
 
@@ -65,6 +75,8 @@ internal class Program
         app.UseAuthorization();
 
         app.MapDefaultControllerRoute();
+
+        app.UseMvcWithDefaultRoute();
 
         app.Run();
     }

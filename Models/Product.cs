@@ -17,9 +17,10 @@ public sealed record Product
 
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 
-    public DateTime? UpdateAt { get; init; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; init; } = DateTime.UtcNow;
 
     public bool IsDeleted { get; init; } = false;
     public DateTime? DeletedAt { get; init; } = null;
     public long CategoryId { get; init; }
+    public long ManufacturerId { get; init; }
 }

@@ -7,3 +7,5 @@ Models/bin
 Models/obj
 Store.sln
 *.user
+Repositories/obj
+Repositories/bin

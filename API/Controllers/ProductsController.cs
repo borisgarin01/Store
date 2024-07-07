@@ -1,30 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
+using Repositories.Interfaces.Derived;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
-    public Product[] Products { get; init; }
-    public ProductsController()
+    private readonly IProductsRepository _productsRepository;
+    public ProductsController(IProductsRepository productsRepository)
     {
-        Products =
-        [
-            new Product { Name = "Intel Xeon E2620 v3", CreatedAt=DateTime.UtcNow, Description="Xeon E2620 v3"  },
-            new Product { Name = "Xeon E2670 v3", CreatedAt=DateTime.UtcNow, Description="Xeon E2670 v3"}
-        ];
+        _productsRepository = productsRepository;
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public async Task<ActionResult<Product>> Index()
     {
-        return Ok(Products);
+        return Ok(await _productsRepository.GetAll());
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddProductAsync(Product product)
+    public async Task<ActionResult> AddProductAsync(Product product)
     {
+        await _productsRepository.AddAsync(product);
         return Created("api/Products", product);
     }
 }
