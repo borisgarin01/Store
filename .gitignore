@@ -1,0 +1,9 @@
+﻿.vs
+API/bin
+API/obj
+DataAccess/bin
+DataAccess/obj
+Models/bin
+Models/obj
+Store.sln
+*.user
